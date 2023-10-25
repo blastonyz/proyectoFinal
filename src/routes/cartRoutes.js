@@ -17,19 +17,19 @@ router.post('/cart', async (req,res) => {
         const content = JSON.stringify(carts, null, '\t'); 
         try {
             await fs.promises.writeFile(path, content, 'utf-8');
-            
+            return newCart; 
         } 
-       
+
         catch (error) {
-          return  console.log(`Ha ocurrido un error: ${error.message}`);
+            console.log(`Ha ocurrido un error: ${error.message}`);
         }
-        return   res.status(201).json();
-        
+        res.status(201).json(newCart);
+
 });
 
 router.post('/:cId/product/:pId', async (req,res) => {
         const {cId,pId} = req.params;
-      
+
         const newProduct = {
             id: pId,
             quantity:1,
@@ -37,17 +37,17 @@ router.post('/:cId/product/:pId', async (req,res) => {
         const cartIndex = carts.findIndex((cart) => cart.id === cId);
 
         if (cartIndex !== -1) {
-                
-               
+
+
             const cart = carts[cartIndex];
              const existingProduct = cart.products.find((product) => product.id === pId);
-        
+
               if (existingProduct) {
                       existingProduct.quantity++;
                 } else {
                     cart.products.push(newProduct);
                 }
-        
+
                 const content = JSON.stringify(carts, null, '\t');
                 try {
                     fs.promises.writeFile(path, content, 'utf-8');
@@ -56,17 +56,17 @@ router.post('/:cId/product/:pId', async (req,res) => {
                     res.status(500).json({ error: 'Error writing to file' });
                     return;
                       }
-        
-             return   res.status(201).json();
+
+                res.status(201).json(cart);
             } else {
-            return res.status(404).json({ error: 'Cart not found' });
+            res.status(404).json({ error: 'Cart not found' });
             }
 });
 
 router.get('/:cId',async (req,res)=>{
     const {cId } = req.params;
-    
-    
+
+
 
     try {
         const contetJson = await fs.promises.readFile(path,'utf-8')
@@ -78,10 +78,9 @@ router.get('/:cId',async (req,res)=>{
                             return res.status(200).json(list);   
               }    
         } catch (error) {
-       
-        return  console.log(`Ha ocurrido un error: ${error.message}`);;
+        console.log(`Ha ocurrido un error: ${error.message}`);
+        return;
           }
-          
+
 })
 module.exports = router;
-

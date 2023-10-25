@@ -1,6 +1,6 @@
 const express = require('express');
-const productRouter = require('./routes/productRoute');
-const cartRouter = require('./routes/cartRoutes');
+const productRouter = require('./routes/productRoute')
+const cartRouter = require('./routes/cartRoutes')
 
 const port = 8080;
 const app = express();
@@ -13,9 +13,8 @@ app.get('/',(req,res) => {
 });
 
 app.use('/api',productRouter);
-   
+
 app.use('/api',cartRouter);
 
 
 app.listen(port,()=>{console.log(`Server runing on port:${port} `)})
-
