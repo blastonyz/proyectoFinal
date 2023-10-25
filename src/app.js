@@ -1,6 +1,6 @@
 const express = require('express');
-const productRouter = require('./routes/productRoute')
-const cartRouter = require('./routes/cartRoutes')
+const productRouter = require('./routes/productRoute');
+const cartRouter = require('./routes/cartRoutes');
 
 const port = 8080;
 const app = express();
@@ -12,14 +12,9 @@ app.get('/',(req,res) => {
     res.send('home')
 });
 
-app.use('/api',productRouter, async (req,res,next) => {
-   res.status(200).json();
-   next();
-});
-
-app.use('/api',cartRouter, async (req,res) => {
-    res.status(200).json();
- });
+app.use('/api',productRouter);
+   
+app.use('/api',cartRouter);
 
 
 app.listen(port,()=>{console.log(`Server runing on port:${port} `)})

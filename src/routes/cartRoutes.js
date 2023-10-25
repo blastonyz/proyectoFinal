@@ -17,13 +17,13 @@ router.post('/cart', async (req,res) => {
         const content = JSON.stringify(carts, null, '\t'); 
         try {
             await fs.promises.writeFile(path, content, 'utf-8');
-            return newCart; 
+            
         } 
        
         catch (error) {
-            console.log(`Ha ocurrido un error: ${error.message}`);
+          return  console.log(`Ha ocurrido un error: ${error.message}`);
         }
-        res.status(201).json();
+        return   res.status(201).json();
         
 });
 
@@ -57,9 +57,9 @@ router.post('/:cId/product/:pId', async (req,res) => {
                     return;
                       }
         
-                res.status(201).json();
+             return   res.status(201).json();
             } else {
-            res.status(404).json({ error: 'Cart not found' });
+            return res.status(404).json({ error: 'Cart not found' });
             }
 });
 
@@ -75,11 +75,11 @@ router.get('/:cId',async (req,res)=>{
               if(cartSearch){
                               const list = cartSearch.products;
                               console.log(list);
-                             res.status(200).json(list);   
+                            return res.status(200).json(list);   
               }    
         } catch (error) {
-        console.log(`Ha ocurrido un error: ${error.message}`);
-        return;
+       
+        return  console.log(`Ha ocurrido un error: ${error.message}`);;
           }
           
 })
