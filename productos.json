@@ -1,0 +1,112 @@
+[
+	{
+		"id": "0223ba84-d688-4b82-8792-d5c64a05a28e",
+		"title": "Taladro Makita",
+		"description": "Rotopercutor",
+		"price": 60000,
+		"category": "equipos manuales",
+		"code": 23,
+		"stock": 10,
+		"statusP": true,
+		"thumbnail": []
+	},
+	{
+		"id": "25836a9a-4b6b-4e7a-a5e5-3cdc854e36f3",
+		"title": "Lijadora Orbital",
+		"description": "5 velocidades",
+		"price": 35000,
+		"category": "equipos manuales",
+		"code": 301,
+		"stock": 10,
+		"statusP": true,
+		"thumbnail": []
+	},
+	{
+		"id": "3cccec7f-edcb-485d-8c49-1f967a02f596",
+		"title": "Compresor Daewo",
+		"description": "1/2hp",
+		"price": 55000,
+		"category": "equipos neumaticos",
+		"code": 375,
+		"stock": 77,
+		"statusP": true,
+		"thumbnail": []
+	},
+	{
+		"id": "aec3536b-6df0-406f-bb09-a771a8140118",
+		"title": "Amoladora Stanley",
+		"description": "2 1/2",
+		"price": 52000,
+		"category": "equipos manuales",
+		"code": 221,
+		"stock": 32,
+		"statusP": true,
+		"thumbnail": []
+	},
+	{
+		"id": "3a108a5e-70ff-41d1-98e1-c78b1935a59b",
+		"title": "Caladora Marolio",
+		"description": "le da sabor a tu vida",
+		"price": 2500,
+		"category": "equipos manuales",
+		"code": 475,
+		"stock": 150,
+		"statusP": true,
+		"thumbnail": []
+	},
+	{
+		"id": "38be3834-9b8c-4d2e-9618-1b0bf582b5fe",
+		"title": "Inflador ACME",
+		"description": "sin garantia",
+		"price": 1800,
+		"category": "ofertas",
+		"code": 85,
+		"stock": 23,
+		"statusP": true,
+		"thumbnail": []
+	},
+	{
+		"id": "0724ca82-740f-4cd3-856f-f345ea953056",
+		"title": "Taladro p/Drywalt Bosch",
+		"description": "700w",
+		"price": 25000,
+		"category": "equipos manuales",
+		"code": 566,
+		"stock": 65,
+		"statusP": true,
+		"thumbnail": []
+	},
+	{
+		"id": "8d24e00b-a33d-4de9-8a68-640de85bce03",
+		"title": "Termofusora Noderrit",
+		"description": "1500w",
+		"price": 35000,
+		"category": "equipos manuales",
+		"code": 862,
+		"stock": 65,
+		"statusP": true,
+		"thumbnail": []
+	},
+	{
+		"id": "02ad111d-180e-434c-a4ef-11ea704cdbf0",
+		"title": "Motosierra Truchan",
+		"description": "Z50",
+		"price": 21000,
+		"category": "equipos a combustion",
+		"code": 789,
+		"stock": 25,
+		"statusP": true,
+		"thumbnail": []
+	},
+	{
+		"id": "59ead911-ee11-4b2f-8022-1e6c746c114d",
+		"title": "Soldadora Luqstoff",
+		"description": "2500w",
+		"price": 95000,
+		"category": "soldadura",
+		"code": 654,
+		"stock": 68,
+		"statusP": true,
+		"thumbnail": []
+	}
+]
