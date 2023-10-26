@@ -17,13 +17,14 @@ router.post('/cart', async (req,res) => {
         const content = JSON.stringify(carts, null, '\t'); 
         try {
             await fs.promises.writeFile(path, content, 'utf-8');
-            return newCart; 
+            return res.status(201).json(newCart);
         } 
 
         catch (error) {
             console.log(`Ha ocurrido un error: ${error.message}`);
+            return res.status(404).json({msg:error.message});
         }
-        res.status(201).json(newCart);
+        
 
 });
 
