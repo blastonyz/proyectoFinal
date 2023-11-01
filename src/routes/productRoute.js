@@ -5,7 +5,7 @@ const productManager  = require('../productManager');
 const { v4: uuidV4} = require('uuid');
 const fs = require('fs');
 const { pid } = require('process');
-const path = 'productos.json';
+const path = './productos.json';
 
 
 router.get('/products',async (req,res) => {
