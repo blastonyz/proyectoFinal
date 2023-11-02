@@ -33,6 +33,3 @@ app.use((error,req,res,next) => {
 
  export default app;
 
-/*const express = require('express');
-const productRouter = require('./routes/productRoute')
-const cartRouter = require('./routes/cartRoutes')*/
