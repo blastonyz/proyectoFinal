@@ -1,8 +1,9 @@
-const express = require('express');
-const {Router} = require('express')
+import express from 'express'
+import { Router } from 'express';
 const router = Router();
-const { v4: uuidV4} = require('uuid');
-const fs = require('fs');
+import {v4 as uuidV4} from 'uuid';
+import fs from 'fs';
+
 const path = './carts.json';
 const carts = [];
 
@@ -84,4 +85,10 @@ router.get('/:cId',async (req,res)=>{
           }
 
 })
-module.exports = router;
+export default router;
+
+/*const express = require('express');
+const {Router} = require('express')
+const router = Router();
+const { v4: uuidV4} = require('uuid');
+const fs = require('fs');*/

@@ -1,5 +1,5 @@
-const fs = require('fs');
-const { v4: uuidV4} = require('uuid');
+import fs from 'fs';
+import {v4 as uuidV4} from 'uuid';
 
 class ProductManager{
    
@@ -16,7 +16,6 @@ class ProductManager{
             try {                           
                     const listJSON = await fs.promises.readFile(this.path,'utf-8');
                     const list = JSON.parse(listJSON);                    
-                    console.log('Lista de productos:',list);
                     return list;
             }catch (error) {
                 console.error(`Ocurrio un error: ${error.message}`)
@@ -228,5 +227,9 @@ class ProductManager{
     [],
   )
   
- module.exports = productManager;
+export default productManager;
  
+
+ /*const fs = require('fs');
+const { v4: uuidV4} = require('uuid');
+*/

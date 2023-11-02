@@ -1,20 +1,38 @@
-const express = require('express');
-const productRouter = require('./routes/productRoute')
-const cartRouter = require('./routes/cartRoutes')
+import express from 'express';
+import productRouter from "./routes/productRoute.js";
+import cartRouter from "./routes/cartRoutes.js";
+import path from 'path';
+import { __dirname } from './utils.js';
+import handlebars from 'express-handlebars';
+import productManager from './productManager.js';
 
-const port = 8080;
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(express.static(path.join(__dirname,'../public')))
 
+app.engine('handlebars', handlebars.engine());
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'handlebars')
 
-app.get('/',(req,res) => {
-    res.send('home')
+app.get('/home',async (req,res) => {
+    const product = await productManager.getProducts();
+    res.render('index' , { title: 'handlebars y socket.io',product});
 });
 
 app.use('/api',productRouter);
 
 app.use('/api',cartRouter);
 
+app.use((error,req,res,next) => {
+    const message = `error desconocido: ${error.message}`;
+    console.error(message);
+    res.status(500).json({message});
+    next();
+})
 
-app.listen(port,()=>{console.log(`Server runing on port:${port} `)})
+ export default app;
+
+/*const express = require('express');
+const productRouter = require('./routes/productRoute')
+const cartRouter = require('./routes/cartRoutes')*/

@@ -1,0 +1,47 @@
+<div>
+<h1>Edicion de Lista de Productos</h1>
+
+<h3>Agregar</h3>
+<form id="products-add">
+    <input type="text" id="titleAdd" required>
+    <input type="text" id="descriptionAdd" required>
+    <input type="text" id="priceAdd" required>
+    <input type="text" id="categoryAdd" required>
+    <input type="text" id="codeAdd" required>
+    <input type="text" id="stockAdd" required>
+    <input type="text" id="statusAdd" required>
+    <input type="submit">
+</form>
+
+<h3>Buscar por Id</h3>
+<form id="product-find">
+    <input type="text" id="findId">
+    <input type="submit">
+</form>
+
+<h3>Borrar por Id</h3>
+<form id="product-delete">
+    <input type="text" id="deleteId">
+    <input type="submit">
+</form>
+
+<h3>Actualizar</h3>
+<form id="products-update">
+    <input type="text" id="titleUp">
+    <input type="text" id="descriptionUp">
+    <input type="text" id="priceUp">
+    <input type="text" id="categoryUp">
+    <input type="text" id="codeUp">
+    <input type="text" id="stockUp">
+    <input type="text" id="statusUp">
+    <input type="submit">
+</form>
+<ul id="product-list">
+    <h3>Lista de Productos</h3>
+</ul>
+
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/index.js"></script>

@@ -1,10 +1,10 @@
-const express = require('express');
-const {Router} = require('express')
+import express from 'express'
+import { Router } from 'express';
 const router = Router();
-const productManager  = require('../productManager');
-const { v4: uuidV4} = require('uuid');
-const fs = require('fs');
-const { pid } = require('process');
+import productManager from '../productManager.js';
+import {v4 as uuidV4} from 'uuid';
+import fs from 'fs'
+import {pid} from 'process';
 const path = './productos.json';
 
 
@@ -26,7 +26,7 @@ router.get('/products',async (req,res) => {
     return res.status(200).json(search);
 });
 //agregar producto
-router.post('/', async (req,res) =>{
+router.post('/product/add', async (req,res) =>{
     const product = await productManager.getProducts();
     const {body} = req;
     
@@ -50,7 +50,7 @@ router.post('/', async (req,res) =>{
 
 })
 
-router.put('/:pId', async (req,res) =>{
+router.put('/product/update/:pId', async (req,res) =>{
     const product = await productManager.getProducts();
     const {body} = req;
     const index = product.findIndex((e)=> e.id ===req.params.pId);
@@ -82,10 +82,18 @@ router.put('/:pId', async (req,res) =>{
 
 })
 
-router.delete('/:pId', async (req,res) =>{
+router.delete('/product/delete/:pId', async (req,res) =>{
     const prodId = req.params.pId;
     const deleted = productManager.deleteProduct(prodId)
     return res.status(200).json(deleted);
 
 })
-module.exports = router;
+export default router;
+
+/*const express = require('express');
+const {Router} = require('express')
+const router = Router();
+const productManager  = require('../productManager');
+const { v4: uuidV4} = require('uuid');
+const fs = require('fs');
+const { pid } = require('process');*/
