@@ -5,6 +5,7 @@ import path from 'path';
 import { __dirname } from './utils.js';
 import handlebars from 'express-handlebars';
 import productManager from './productManager.js';
+import viewsRoutes from './routes/viewsRoutes.js'
 
 const app = express();
 app.use(express.json());
@@ -19,7 +20,7 @@ app.get('/home',async (req,res) => {
     const product = await productManager.getProducts();
     res.render('index' , { title: 'handlebars y socket.io',product});
 });
-
+app.use('/', viewsRoutes);
 app.use('/api',productRouter);
 
 app.use('/api',cartRouter);

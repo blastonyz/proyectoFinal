@@ -1,5 +1,3 @@
-import { emit } from "../../src/socket";
-
 const socket = io();
 
 
@@ -103,14 +101,14 @@ socket.on('List', (data) => {
      ${element.code}
      ${element.stock}
      ` ;
-     prodValues.appendChild('li')  ;
+     productRealT.appendChild(prodValues); ;
     });
 
     console.log('List', data);
 });
 //escucho producto buscado
 socket.on('find',(prodFind) =>{
-    const productFindContainer  = document.getElementById('product-find')
+    const productFindContainer  = document.getElementById('findProduct')
     productFindContainer.innerHTML = "";
     const prodFindVal = document.createElement('p');
     prodFindVal.innerText = `
@@ -121,11 +119,11 @@ socket.on('find',(prodFind) =>{
                                ${prodFind.code}
                                ${prodFind.stock}
                             `;
-    prodFindVal.appendChild('p');
+    productFindContainer.appendChild(prodFindVal);
 })
 //escucho producto borrado
 socket.on('delete',(prodDel) =>{
-    const productDelContainer  = document.getElementById('product-delete')
+    const productDelContainer  = document.getElementById('deleteProduct')
     productDelContainer.innerHTML = "";
     const prodDelVal = document.createElement('p');
     prodDelVal.innerText = `
@@ -136,5 +134,5 @@ socket.on('delete',(prodDel) =>{
                                ${prodDel.code}
                                ${prodDel.stock}
                             `;
-    prodDelVal.appendChild('p');
+    productDelContainer.appendChild(prodDelVal);
 })
