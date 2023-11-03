@@ -19,6 +19,7 @@ formMessageAdd.addEventListener('submit', (even) =>{
     const inputStatusAdd = document.getElementById('statusAdd');
     const statusP = inputStatusAdd.value;
 
+
     const newProduct = {
                 title,
                 description,
@@ -37,55 +38,68 @@ formMessageAdd.addEventListener('submit', (even) =>{
     inputCodeAdd.value = '';
     inputStockAdd.value = '';
     inputStatusAdd.value = '';
-})
+});
 
 const formMessageUpdate = document.getElementById('products-update');
 formMessageUpdate.addEventListener('submit', (even) =>{
     even.preventDefault();
+    const idUp = document.getElementById('idUp')
+    const prodId = idUp.value;
     const inputTitleUp = document.getElementById('titleUp')
-    const title = inputTitleUp.value;
+    const newTitle = inputTitleUp.value;
     const inputdescriptionUp = document.getElementById('descriptionUp');
-    const description = inputdescriptionUp.value;
-    const price = inputPriceUp.value;
+    const newDescription = inputdescriptionUp.value;
+    const inputPriceUp = document.getElementById('priceUp');
+    const newPrice = inputPriceUp.value;
     const inputCategoryUp = document.getElementById('categoryUp');
-    const category =  inputCategoryUp.value;
+    const newCategory =  inputCategoryUp.value;
     const inputCodeUp = document.getElementById('codeUp');
-    const code = inputCodeUp.value;
+    const newCode = inputCodeUp.value;
     const inputStockUp = document.getElementById('stockUp');
-    const stock = inputStockUp.value;
+    const newStock = inputStockUp.value;
     const inputStatusUp = document.getElementById('statusUp');
-    const statusP = inputStatusUp.value;
+    const newStatusP = inputStatusUp.value;
 
     const updateProduct = {
-        title,
-        description,
-        price,
-        category,
-        code,
-        stock,
-        statusP,
+        prodId,
+        newTitle,
+        newDescription,
+        newPrice,
+        newCategory,
+        newCode,
+        newStock,
+        newStatusP,
     }
 
-    socket.emit('product-update', updateProduct);
-})
+    socket.emit('product-update', {updateProduct});
+
+    idUp.value = '';
+    inputTitleUp.value = '';
+    inputdescriptionUp.value = '';
+    inputPriceUp.value = '';
+    inputCategoryUp.value = '';
+    inputCodeUp.value = '';
+    inputStockUp.value = '';
+    inputStatusUp.value = '';
+});
 
 const formMessageFind = document.getElementById('products-find');
-formMessageFind.addEventListener('submit', (even) =>{
-    even.preventDefault();
+console.log('formMessageFind:', formMessageFind);
+formMessageFind.addEventListener('submit', (event) => {
+    event.preventDefault();
     const IdFind = document.getElementById('findId');
     const findId = IdFind.value;
-
-    socket.emit('products-find', findId);
-})
+    console.log('findId:', findId);
+    socket.emit('productsFind', findId);
+});
 
 const formMessageDelete = document.getElementById('products-delete');
-formMessageDelete.addEventListener('submit', (even) =>{
-    even.preventDefault();
+formMessageDelete.addEventListener('submit', (event) =>{
+    event.preventDefault();
     const IdDelete = document.getElementById('deleteId');
     const deleteId = IdDelete.value;
-
     socket.emit('products-delete', deleteId);
-})
+});
 
 //escucha y render lista completa
 socket.on('List', (data) => {
@@ -107,21 +121,26 @@ socket.on('List', (data) => {
     console.log('List', data);
 });
 //escucho producto buscado
-socket.on('find',(prodFind) =>{
-    const productFindContainer  = document.getElementById('findProduct')
+socket.on('find', (prodFind) => {
+    console.log('Evento "find" activado');
+    const productFindContainer = document.getElementById('findProduct');
     productFindContainer.innerHTML = "";
     const prodFindVal = document.createElement('p');
     prodFindVal.innerText = `
-                               ${prodFind.title}
-                               ${prodFind.description}
-                               ${prodFind.price}
-                               ${prodFind.category}
-                               ${prodFind.code}
-                               ${prodFind.stock}
-                            `;
+        ${prodFind.title}
+        ${prodFind.description}
+        ${prodFind.price}
+        ${prodFind.category}
+        ${prodFind.code}
+        ${prodFind.stock}
+    `;
     productFindContainer.appendChild(prodFindVal);
-})
-//escucho producto borrado
+
+   
+});
+
+
+/*
 socket.on('delete',(prodDel) =>{
     const productDelContainer  = document.getElementById('deleteProduct')
     productDelContainer.innerHTML = "";
@@ -135,4 +154,12 @@ socket.on('delete',(prodDel) =>{
                                ${prodDel.stock}
                             `;
     productDelContainer.appendChild(prodDelVal);
-})
+});
+*/
+
+
+
+/* <div id="deleteProduct">
+        <h1>Producto Borrado</h1>
+    </div>*/
+

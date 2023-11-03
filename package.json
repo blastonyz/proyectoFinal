@@ -18,5 +18,9 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
+  },
+  "nodemonConfig": {
+    "ignore": ["src/server.js", "src ."],
+    "delay": 2500
   }
 }

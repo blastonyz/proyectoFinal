@@ -5,6 +5,7 @@ import productManager from '../productManager.js';
 import {v4 as uuidV4} from 'uuid';
 import fs from 'fs'
 import {pid} from 'process';
+import {emit, socketServer} from '../socket.js'
 const path = './productos.json';
 
 
@@ -79,7 +80,6 @@ router.put('/product/update/:pId', async (req,res) =>{
     }else{
         res.status(404).json(error.message);
     }
-
 })
 
 router.delete('/product/delete/:pId', async (req,res) =>{

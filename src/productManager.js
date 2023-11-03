@@ -8,7 +8,7 @@ class ProductManager{
         this.products = [];
         this.path = './productos.json'
     }
-
+    
    async getProducts(){
         if(!fs.existsSync(this.path)){
             return console.log('el archivo no se encuentra')
@@ -60,6 +60,35 @@ class ProductManager{
 
     }
 
+    async updateProduct(prodid,newTitle,newDescription,newPrice,NewThumbnail,newCode,newStock){
+        
+      if(!fs.existsSync(this.path)){
+          return console.log('el archivo no se encuentra')
+      }else{
+          try {                           
+                  const listJSON = await fs.promises.readFile(this.path,'utf-8');
+                  const list = JSON.parse(listJSON);
+                  const index = list.findIndex((e)=> e.id === prodid);
+                  console.log(index)
+                     if(index !== -1){
+                      const updatedObj = {...this.products[index],title: newTitle ? newTitle: this.products[index].title, description: newDescription ? newDescription : this.products[index].description, price: newPrice ? newPrice: this.products[index].price,thumbnail: NewThumbnail ? NewThumbnail: this.products[index].thumbnail , code: newCode? newCode:this.products[index].code, stock: newStock? newStock:this.products[index].stock};
+                      this.products[index] = updatedObj;
+                      const content = JSON.stringify(this.products,null,'\t')
+
+                       try {
+                         await fs.promises.writeFile(this.path,content,'utf-8')
+                         return updatedObj;
+                           } catch (error) {
+                          console.log(`No pudo actualizarse el producto: ${error.message}`) 
+                           }
+                                    }
+          
+                  }catch (error) {
+                      console.error(`Ocurrio un error: ${error.message}`)
+               }
+          }
+      }
+
     async getProductsbyId(prodid){
 
         if(!fs.existsSync(this.path)){
@@ -93,7 +122,6 @@ class ProductManager{
                     const listJSON = await fs.promises.readFile(this.path,'utf-8');
                     const list = JSON.parse(listJSON);
                     const deletedList = list.filter((e)=> e.id !== prodid)
-                    console.log(deletedList)
                     const content = JSON.stringify(deletedList,null,'\t')
                     try {
                         await fs.promises.writeFile(this.path,content,'utf-8')
@@ -229,7 +257,3 @@ class ProductManager{
   
 export default productManager;
  
-
- /*const fs = require('fs');
-const { v4: uuidV4} = require('uuid');
-*/
