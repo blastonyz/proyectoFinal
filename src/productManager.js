@@ -60,7 +60,7 @@ class ProductManager{
 
     }
 
-    async updateProduct(prodid,newTitle,newDescription,newPrice,NewThumbnail,newCode,newStock){
+    async updateProduct(prodid,newTitle,newDescription,newPrice,newCategory,newCode,newStock,newStatusP){
         
       if(!fs.existsSync(this.path)){
           return console.log('el archivo no se encuentra')
@@ -71,7 +71,15 @@ class ProductManager{
                   const index = list.findIndex((e)=> e.id === prodid);
                   console.log(index)
                      if(index !== -1){
-                      const updatedObj = {...this.products[index],title: newTitle ? newTitle: this.products[index].title, description: newDescription ? newDescription : this.products[index].description, price: newPrice ? newPrice: this.products[index].price,thumbnail: NewThumbnail ? NewThumbnail: this.products[index].thumbnail , code: newCode? newCode:this.products[index].code, stock: newStock? newStock:this.products[index].stock};
+                      const updatedObj = {...this.products[index],
+                        title: newTitle ? newTitle: this.products[index].title, 
+                        description: newDescription ? newDescription : this.products[index].description,
+                        price: newPrice ? newPrice: this.products[index].price,
+                        category: newCategory ? newCategory: this.products[index].category , 
+                        code: newCode? newCode:this.products[index].code, 
+                        stock: newStock? newStock:this.products[index].stock,
+                        statusP: newStatusP? newStatusP:this.products[index].newStatusP,
+                      };
                       this.products[index] = updatedObj;
                       const content = JSON.stringify(this.products,null,'\t')
 
@@ -122,10 +130,11 @@ class ProductManager{
                     const listJSON = await fs.promises.readFile(this.path,'utf-8');
                     const list = JSON.parse(listJSON);
                     const deletedList = list.filter((e)=> e.id !== prodid)
-                    const content = JSON.stringify(deletedList,null,'\t')
+                    this.products= deletedList;
+                    const content = JSON.stringify(this.products,null,'\t')
                     try {
                         await fs.promises.writeFile(this.path,content,'utf-8')
-                        return console.log('producto borrado')
+                        return console.log('producto borrado',this.products);
                           } catch (error) {
                          console.log(`No se pudo borrar: ${error.message}`) 
                           }

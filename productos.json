@@ -1,28 +1,6 @@
 [
 	{
-		"id": "eaa356dc-9cbb-4949-843e-5b1f96bb2b95",
-		"title": "Taladro Makita",
-		"description": "Rotopercutor",
-		"price": 60000,
-		"category": "equipos manuales",
-		"code": 23,
-		"stock": 10,
-		"statusP": true,
-		"thumbnail": []
-	},
-	{
-		"id": "0847ff72-81af-4ac9-ae1c-16feacce48ca",
-		"title": "Lijadora Orbital",
-		"description": "5 velocidades",
-		"price": 35000,
-		"category": "equipos manuales",
-		"code": 301,
-		"stock": 10,
-		"statusP": true,
-		"thumbnail": []
-	},
-	{
-		"id": "bf3f7680-e998-40ec-8f9c-a86408b329fe",
+		"id": "68643394-b6cb-40b0-879f-4796080dca40",
 		"title": "Compresor Daewo",
 		"description": "1/2hp",
 		"price": 55000,
@@ -33,7 +11,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "0d992c1c-64c5-4940-b72b-a59b6694a8e9",
+		"id": "232a6b28-0d27-4469-af0f-769cd8eb9977",
 		"title": "Amoladora Stanley",
 		"description": "2 1/2",
 		"price": 52000,
@@ -44,7 +22,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "b731eb2c-0ce7-4ad0-81e4-abe1f9ab724a",
+		"id": "d8972d29-0ff1-44da-93a0-dae3ba0225b1",
 		"title": "Caladora Marolio",
 		"description": "le da sabor a tu vida",
 		"price": 2500,
@@ -55,7 +33,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "5fe1c73e-f64e-488f-81fe-cfdedb4f5fd6",
+		"id": "afe5480d-7cd7-4ec9-9329-fecc6ee314a6",
 		"title": "Inflador ACME",
 		"description": "sin garantia",
 		"price": 1800,
@@ -66,18 +44,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "a48d77ff-4ef6-46ed-9174-0611e2a97e51",
-		"title": "Taladro p/Drywalt Bosch",
-		"description": "700w",
-		"price": 25000,
-		"category": "equipos manuales",
-		"code": 566,
-		"stock": 65,
-		"statusP": true,
-		"thumbnail": []
-	},
-	{
-		"id": "74631ef0-3850-4839-9395-220565d61128",
+		"id": "5232c4b2-aaec-4374-be81-9060c55a9d53",
 		"title": "Termofusora Noderrit",
 		"description": "1500w",
 		"price": 35000,
@@ -88,7 +55,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "6cb7c13a-22c8-41ea-873e-6e1d073bf837",
+		"id": "367f1c0d-add6-4e70-a32b-0b7e1210ff01",
 		"title": "Motosierra Truchan",
 		"description": "Z50",
 		"price": 21000,
@@ -99,7 +66,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "10e8549d-5dcf-431a-8f01-185de19a6620",
+		"id": "f4441483-693c-4e21-b711-a8d3265233d7",
 		"title": "Soldadora Luqstoff",
 		"description": "2500w",
 		"price": 95000,
@@ -108,5 +75,15 @@
 		"stock": 68,
 		"statusP": true,
 		"thumbnail": []
+	},
+	{
+		"id": "6b38a52d-6fc8-4424-bcc1-bd0dbc6ba245",
+		"title": "367f1c0d-add6-4e70-a32b-0b7e1210ff01",
+		"description": "asdf",
+		"price": "asdf",
+		"category": "asd",
+		"code": "fasd",
+		"stock": "fasd",
+		"statusP": "asdf"
 	}
 ]
