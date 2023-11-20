@@ -5,7 +5,9 @@ import path from 'path';
 import { __dirname } from './utils.js';
 import handlebars from 'express-handlebars';
 import productManager from './productManager.js';
-import viewsRoutes from './routes/viewsRoutes.js'
+import viewsRoutes from './routes/viewsRoutes.js';
+import indexRouter from './routes/views/index.router.js';
+import chatRouter from './routes/views/chat.router.js'
 
 const app = express();
 app.use(express.json());
@@ -24,7 +26,8 @@ app.use('/', viewsRoutes);
 app.use('/api',productRouter);
 
 app.use('/api',cartRouter);
-
+app.use('/db',indexRouter);
+app.use('/db',chatRouter);
 app.use((error,req,res,next) => {
     const message = `error desconocido: ${error.message}`;
     console.error(message);

@@ -1,5 +1,6 @@
 import {Server} from 'socket.io';
 import productManager from './productManager.js';
+import MessageModel from './models/message.model.js';
 
 export let socketServer;
 
@@ -71,6 +72,17 @@ export const init = (httpServer) => {
             let productList = await productManager.getProducts();
             emit('List', productList, console.log("nueva lista"));
         })
+        //chat
+        socketClient.on('clientMessage', async(message)=>{
+            console.log("message", message);
+            await MessageModel.create(message);
+            const messages = await MessageModel.find({});
+            console.log(messages);
+            //probe con map y toJSON y tampoco renderizaba
+            emit('DBmessages', messages);
+        })
+        
+
     })
 
 }
