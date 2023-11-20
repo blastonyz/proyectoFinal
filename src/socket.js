@@ -1,5 +1,5 @@
 import {Server} from 'socket.io';
-import productManager from './productManager.js';
+import ProductManager from './dao/ProductManagerMdb.js'
 import MessageModel from './models/message.model.js';
 
 export let socketServer;
@@ -13,7 +13,7 @@ export const init = (httpServer) => {
 
     socketServer.on('connection', async (socketClient) => {
         
-        let productList = await productManager.getProducts();
+        let productList = await ProductManager.get();
 
         console.log(`Nuevo cliente conectado ${socketClient.id}`);
         //envio lista completa
@@ -22,8 +22,8 @@ export const init = (httpServer) => {
         socketClient.on('product-add',async (newProduct) =>{
             try {
                 console.log(`CLiente envio un mensaje `);
-                await productManager.addProduct(newProduct.title,newProduct.description,newProduct.price, newProduct.category, newProduct.code, newProduct.stock, newProduct.statusP);
-                let productList = await productManager.getProducts();
+                await ProductManager.create(newProduct);
+                let productList = await ProductManager.get();
                 console.log("prodcuto agregado")
                 emit('List', productList, console.log("nueva lista"));
             } catch (error) {
@@ -36,18 +36,28 @@ export const init = (httpServer) => {
             console.log(`CLiente envio un mensaje:`);
             try {
                 console.log(`CLiente envio un mensaje `);
-                await productManager.updateProduct(updateProduct.prodId, updateProduct.newTitle, updateProduct.newDescription, updateProduct.newPrice, updateProduct.newCategory, updateProduct.newCode, updateProduct.newStock, updateProduct.newStatusP);
-                let productList = await productManager.getProducts();
+                let sid = updateProduct.prodId;
+                let body = {
+                    newTitle: updateProduct.newTitle,
+                    newDescription: updateProduct.newDescription,
+                    newPrice: updateProduct.newPrice, 
+                    newCategory: updateProduct.newCategory,
+                    newCode: updateProduct.newCode, 
+                    newStock: updateProduct.newStock,
+                    newStatusP: updateProduct.newStatusP}
+
+                await ProductManager.updateById(sid,body);
+                let productList = await ProductManager.get();
                 emit('List', productList, console.log("nueva lista"));
             } catch (error) {
                 console.error('error al actualizar producto',error)
             }
-        })
+        });
 
         socketClient.on('productsFind', async (findId) => {
             console.log(`Cliente envió un mensaje: ${findId}`);
             try {
-                const prodFind = await productManager.getProductsbyId(findId);
+                const prodFind = await ProductManager.getById(findId);
                 if (prodFind) {
                     emit('find', prodFind);
                 } else {
@@ -63,13 +73,13 @@ export const init = (httpServer) => {
            
             try {
                 
-                await productManager.deleteProduct(deleteId);
+                await ProductManager.deleteById(deleteId);
                 
             } catch (error) {
                 console.error('error al borrar producto',error)
             }
             
-            let productList = await productManager.getProducts();
+            let productList = await ProductManager.get();
             emit('List', productList, console.log("nueva lista"));
         })
         //chat
@@ -86,4 +96,3 @@ export const init = (httpServer) => {
     })
 
 }
-

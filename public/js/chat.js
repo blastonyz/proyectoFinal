@@ -17,16 +17,15 @@ formChat.addEventListener('submit', (even) =>{
 });
 //no se renderizan los msj
 socket.on('DBmessages', (messages)=>{
-    console.log(messages);
-
     const logMessages = document.getElementById('log-messages');
     messages.forEach(msg => {
         console.log('Processing message:', msg);
         const mssg = document.createElement('p');
         mssg.innerText = `
-        ${this.user}
-        ${this.body}
+        ${msg.user}
+        ${msg.body}
         `;
         logMessages.appendChild(mssg);
     });
+    console.log("mensajes", messages);
 })
