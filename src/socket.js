@@ -32,21 +32,11 @@ export const init = (httpServer) => {
           
         })
 
-        socketClient.on('product-update', async ({updateProduct}) =>{
+        socketClient.on('product-update', async (updateProduct) =>{
             console.log(`CLiente envio un mensaje:`);
             try {
                 console.log(`CLiente envio un mensaje `);
-                let sid = updateProduct.prodId;
-                let body = {
-                    newTitle: updateProduct.newTitle,
-                    newDescription: updateProduct.newDescription,
-                    newPrice: updateProduct.newPrice, 
-                    newCategory: updateProduct.newCategory,
-                    newCode: updateProduct.newCode, 
-                    newStock: updateProduct.newStock,
-                    newStatusP: updateProduct.newStatusP}
-
-                await ProductManager.updateById(sid,body);
+                await ProductManager.updateById(updateProduct.id,updateProduct);
                 let productList = await ProductManager.get();
                 emit('List', productList, console.log("nueva lista"));
             } catch (error) {

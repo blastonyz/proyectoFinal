@@ -61,17 +61,17 @@ formMessageUpdate.addEventListener('submit', (even) =>{
     const newStatusP = inputStatusUp.value;
 
     const updateProduct = {
-        prodId,
-        newTitle,
-        newDescription,
-        newPrice,
-        newCategory,
-        newCode,
-        newStock,
-        newStatusP,
+        id: prodId,
+        title:newTitle.length>0?newTitle:undefined,
+        description:newDescription.length>0?newDescription:undefined,
+        price: newPrice.length>0?newPrice:undefined,
+        category:newCategory.length>0?newCategory:undefined,
+        code:newCode.length>0?newCode:undefined,
+        stock:newStock.length>0?newStock:undefined,
+        statusP:newStatusP.length>0?newStatusP:undefined,
     }
 
-    socket.emit('product-update', {updateProduct});
+    socket.emit('product-update', updateProduct);
 
     idUp.value = '';
     inputTitleUp.value = '';
