@@ -7,41 +7,64 @@ const router = Router();
 
 
 
-router.post('/cart', async (req,res) => {
+router.post('/carts', async (req,res) => {
 //crea y añade a mongodb
 try {
     const { productId, quantity } = req.body;
-    
-        // creamos un carrito
-      let cart = await CartModel.create({ products: [{productId},{quantity}] });
 
-    /*
-    // Verificar si el producto ya está en el carrito
-    const existingProductIndex = cart.products.findIndex(product => product.prodId === productId);
-
-    if (existingProductIndex !== -1) {
-        // Si el producto ya está en el carrito, actualiza la cantidad
-        cart.products[existingProductIndex].quantity += parseInt(quantity);
-    } else {
-        // Si el producto no está en el carrito, lo agrega
-        cart.products.push({ prodId: productId, quantity: parseInt(quantity) });
-    }*/
-
-    res.status(201).json({ message: 'Producto agregado al carrito exitosamente' },cart);
+      let existingCart = await CartModel.findOne();
+      console.log(existingCart);
+      
+      if(!existingCart){   
+      let cart = await CartModel.create({ products: [{prodId: productId,quantity:quantity}] });
+      res.status(201).json({ message: 'carrito creado exitosamente' ,cart});
+      }else{
+        let existProduct = existingCart.products.find( (p) => p.prodId.toString() === productId );
+        console.log(existProduct);
+          if(!existProduct){
+            await CartModel.updateOne({
+                _id: existingCart._id,},{
+               
+               $push:{products: {prodId: productId,quantity:quantity}}
+                }
+               );
+               res.status(201).json({ message: 'carrito actualizado' ,existingCart});
+          }
+          
+          await CartModel.updateOne({
+            _id: existingCart._id,},
+           
+           {products: {prodId: productId, quantity: existProduct.quantity += quantity} }
+            
+           );
+           res.status(201).json({ message: 'cantidad actualizada' ,existProduct})
+      }
+  
     } catch (error) {
     console.error(error);
     res.status(500).json({ status: 'error', message: 'Error al agregar producto al carrito' });
+
     }
 });
 
 
 
-router.delete('/carts/:cid/products/:pid', async(req,res) =>{
+router.delete('/carts/:cid/products/:pid', async (req,res) => {
     //eliminar el producto seleccionado del carrito
 });
 
-router.delete('/carts/:cid', async(req,res) =>{
+router.delete('/carts/:cid', async (req,res) => {
     //eliminar el carrito completo
+    try {
+        const cId = req.params.cid;
+       const deleteCart = await CartModel.deleteOne({_id: cId});
+       console.log('result',deleteCart);
+        res.status(204).json(`carrito borrado ${cId}`);
+    } catch (error) {
+        console.error('error al borrar');
+        res.status(400).json('error')
+    }
+   
 });
 
 

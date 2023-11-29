@@ -6,12 +6,13 @@ document.addEventListener('addProduct', () => {
             event.preventDefault();
 
             const productId = form.getAttribute('data-id');
-            const quantityInput = form.querySelector('quantity');
+            const quantityInput = document.getElementById('quantity');
+            console.log(quantityInput,productId);
             const quantity = parseInt(quantityInput.value);
 
           
                 // Enviar la información al servidor
-                fetch('/api/cart', {
+                fetch('/api/carts', {
                     method: 'POST',
                     body: JSON.stringify({ productId, quantity }),
                     headers: {

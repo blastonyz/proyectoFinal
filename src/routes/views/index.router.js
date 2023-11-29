@@ -28,8 +28,8 @@ router.get('/productsdb', async(req,res) => {
          page: prods.page,
          hasPrevPage: prods.hasPrevPage,
          hasNextPage: prods.hasNextPage,
-         prevLink: prods.hasPrevPage ? `http://localhost:8080/db/productsdb?limit=${prods.limit}&page=${prods.prevPages}`: null,
-         nextLink: prods.hasNextPage ? `http://localhost:8080/db/productsdb?limit=${prods.limit}&page=${prods.nextPage}`: null,
+         prevLink: prods.hasPrevPage ? `http://localhost:8080/api/productsdb?limit=${prods.limit}&page=${prods.prevPages}`: null,
+         nextLink: prods.hasNextPage ? `http://localhost:8080/api/productsdb?limit=${prods.limit}&page=${prods.nextPage}`: null,
       }
 
       
