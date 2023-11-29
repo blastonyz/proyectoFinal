@@ -71,7 +71,7 @@ export const init = (httpServer) => {
             
             let productList = await ProductManager.get();
             emit('List', productList, console.log("nueva lista"));
-        })
+        });
         //chat
         socketClient.on('clientMessage', async(message)=>{
             console.log("message", message);
@@ -80,9 +80,9 @@ export const init = (httpServer) => {
             console.log(messages);
             //probe con map y toJSON y tampoco renderizaba
             emit('DBmessages', messages);
-        })
+        });
         
-
+        
     })
 
 }

@@ -1,6 +1,6 @@
 <h1>Lista de Productos</h1>
 <div>
-    {{#each products}}
+    {{#each payload}}
         <div>
             <article>
             <header>
@@ -12,8 +12,23 @@
             <p>{{this.code}}</p>
             <p>{{this.stock}}</p>
             <p>{{this.statusP}}</p>
+
+            <form id="addCart" data-id={{this._id}}>
+                <input type="number" id="quantity" placeholder="0">
+                <button type="submit" onclick="addProduct">Agregar</button>
+            </form>
             </article>
         </div>
     {{/each}}
+
+        <div>
+            <p>Paginas: {{this.totalPages}}</p>
+            <p>Pagina Actual: {{this.page}}</p>
+            <a href={{this.prevLink}}> Anterior </a>
+            <a href={{this.nextLink}}> Siguiente </a>
+        </div>
 </div>
 
+
+
+<script src="/js/cart.front.js"></script>

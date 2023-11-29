@@ -1,6 +1,6 @@
 import express from 'express';
 import productRouter from "./routes/productRoute.js";
-import cartRouter from "./routes/cartRoutes.js";
+import cartRouter from "./routes/views/cartRoutes.js";
 import path from 'path';
 import { __dirname } from './utils.js';
 import handlebars from 'express-handlebars';
@@ -17,17 +17,22 @@ app.use(express.static(path.join(__dirname,'../public')))
 app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars')
-
+//persistencia con websocket
 app.get('/home',async (req,res) => {
     const product = await productManager.getProducts();
     res.render('index' , { title: 'handlebars y socket.io',product});
 });
+//realtime, websocket y mongoDB
 app.use('/', viewsRoutes);
-app.use('/api',productRouter);
+//persistencia de archivos
+app.use('/old',productRouter);
 
 app.use('/api',cartRouter);
-app.use('/db',indexRouter);
-app.use('/db',chatRouter);
+//paginacion
+app.use('/api',indexRouter);
+//chat
+app.use('/api',chatRouter);
+
 app.use((error,req,res,next) => {
     const message = `error desconocido: ${error.message}`;
     console.error(message);
