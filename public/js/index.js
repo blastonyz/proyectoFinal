@@ -140,26 +140,3 @@ socket.on('find', (prodFind) => {
 });
 
 
-/*
-socket.on('delete',(prodDel) =>{
-    const productDelContainer  = document.getElementById('deleteProduct')
-    productDelContainer.innerHTML = "";
-    const prodDelVal = document.createElement('p');
-    prodDelVal.innerText = `
-                               ${prodDel.title}
-                               ${prodDel.description}
-                               ${prodDel.price}
-                               ${prodDel.category}
-                               ${prodDel.code}
-                               ${prodDel.stock}
-                            `;
-    productDelContainer.appendChild(prodDelVal);
-});
-*/
-
-
-
-/* <div id="deleteProduct">
-        <h1>Producto Borrado</h1>
-    </div>*/
-
