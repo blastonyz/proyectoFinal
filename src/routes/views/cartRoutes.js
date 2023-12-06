@@ -141,7 +141,8 @@ router.get('/carts/:cid', async (req,res) => {
 const cId = req.params.cid;
  const cartDb = await CartModel.findById({_id: cId}).populate('products.prodId');
   console.log(cartDb);
- res.render('cart' , { title: 'cart',cartDb});
+  const result = cartDb.products.map((prod) =>{return{id:prod.prodId?._id, title:prod.prodId?.title, description:prod.prodId?.description, price:prod.prodId?.price,category: prod.prodId?.category, code: prod.prodId?.code, sotck: prod.prodId?.stock,statusP: prod.prodId?.statusP}})
+ res.render('cart' , { title: 'cart',result});
 });
 
 

@@ -1,12 +1,10 @@
 <h1>Lista de Productos del carrito</h1>
 <div>
-    {{#each cartDb}}
+    {{#each result}}
         <div>
             <article>
             <p>{{this._id}}</p>    
-            <header>
              <p>{{this.prodId}}</p>   
-            </header>    
             <p>{{this.title}}</p>
             <p>{{this.description}}</p>
             <p>{{this.price}}</p>

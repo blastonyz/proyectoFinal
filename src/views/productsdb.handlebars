@@ -13,9 +13,9 @@
             <p>{{this.stock}}</p>
             <p>{{this.statusP}}</p>
 
-            <form id="addCart" data-id={{this._id}}>
+            <form id="addCart" action="/api/carts" method="post" data-id="{{this._id}}" >
                 <input type="number" id="quantity" placeholder="0">
-                <input type="submit" onclick="addProduct">Agregar
+            <button onclick="addProduct('{{this._id}}')">Agregar</button>
             </form>
             </article>
         </div>
