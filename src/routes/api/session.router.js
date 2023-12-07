@@ -29,7 +29,9 @@ router.post('/sessions/login', async (req,res) => {
         age,
         role
     };
-    res.redirect('/current')
+    res.status(302).redirect('/api/productsdb');
+   
+    
 });
 
 router.post('/sessions/register', async (req,res) => {
@@ -42,24 +44,26 @@ router.post('/sessions/register', async (req,res) => {
             password,
         },
     } = req;
-  if(first_name|| last_name|| email||  age|| password){
+  if(!first_name || !last_name || !email ||  !age || !password){
     return res.status(400).json({message: 'Todos los campos son requeridos'});
     }  
-    await UserModel.create({
+    const user = await UserModel.create({
         first_name,
         last_name,
         email,
         age,
         password,
     });
-    res.redirect('/login')
+    
+    res.redirect('/api/login')
 });
 
+/*
 router.get('/sessions/current', (req,res) => {
     if(!req.session.user){
         return res.status(401).json({message: 'no estas autenticado'});
     }
     res.redirect('/api/prouctsdb');
-    });
+    });*/
 
 export default router;

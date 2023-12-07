@@ -12,6 +12,7 @@ import { URI } from './db/mongoose.js';
 import sessions from 'express-session';
 import sessionRender from './routes/views/sessions.render.js'
 import MongoStore from 'connect-mongo'
+import sessionRouter from './routes/api/session.router.js'
 
 const SESSION_SECRET = 'W9=WyrbA9(8^';
 
@@ -42,7 +43,7 @@ app.get('/home',async (req,res) => {
     res.render('index' , { title: 'handlebars y socket.io',product});
 });
 //login
-app.use('/api', sessionRender);
+app.use('/api', sessionRender, sessionRouter);
 //realtime, websocket y mongoDB
 app.use('/', viewsRoutes);
 //persistencia de archivos

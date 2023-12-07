@@ -1,18 +1,20 @@
 <article>
-<form action="/api/sessions/register" method="post">
+<form id="registerForm" action="/api/sessions/register" method="post">
 <header>
     <h1>Registro</h1>
 </header>
-<input type="text" name="first_name" placeholder="Nombre" required>
-<input type="text" name="last_name" placeholder="Apellido" required>
-<input type="email" name="email" placeholder="correo" required>
-<input type="number" name="age" placeholder="Edad" required>
-<input type="password" name="password" placeholder="pass" required>
+<input id="first_nameInp" type="text" name="first_name" placeholder="Nombre" required>
+<input id="last_nameInp" type="text" name="last_name" placeholder="Apellido" required>
+<input id="emailInp" type="email" name="email" placeholder="correo" required>
+<input id="ageInp" type="number" name="age" placeholder="Edad" required>
+<input id="passwordInp" type="password" name="password" placeholder="pass" required>
 <footer>
     <input type="submit" value="Registrarse">
 </footer>
-<a href="/login">Ingreso</a>
+<a href="/api/login">Ingreso</a>
 </form>
 
 
 </article>
+
+<script src="/js/register.js"></script>
