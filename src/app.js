@@ -7,21 +7,42 @@ import handlebars from 'express-handlebars';
 import productManager from './productManager.js';
 import viewsRoutes from './routes/viewsRoutes.js';
 import indexRouter from './routes/views/index.router.js';
-import chatRouter from './routes/views/chat.router.js'
+import chatRouter from './routes/views/chat.router.js';
+import { URI } from './db/mongoose.js';
+import sessions from 'express-session';
+import sessionRender from './routes/views/sessions.render.js'
+import MongoStore from 'connect-mongo'
+
+const SESSION_SECRET = 'W9=WyrbA9(8^';
 
 const app = express();
+
+app.use(sessions({
+    store: MongoStore.create({
+       mongoUrl: URI,
+       mongoOptions: {}, 
+    }),
+    secret: SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+}))
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname,'../public')))
 
 app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'handlebars')
+app.set('view engine', 'handlebars');
+
+
 //persistencia con websocket
 app.get('/home',async (req,res) => {
     const product = await productManager.getProducts();
     res.render('index' , { title: 'handlebars y socket.io',product});
 });
+//login
+app.use('/api', sessionRender);
 //realtime, websocket y mongoDB
 app.use('/', viewsRoutes);
 //persistencia de archivos

@@ -35,9 +35,10 @@ router.get('/productsdb', async(req,res) => {
       
    }
    
+   const dataUser = req.session.user;
    const data = buildResponse({...products,sort,search});
    console.log(data);
-   res.render('productsdb' ,{...data,title: 'integracion de DB'});
+   res.render('productsdb' ,{...data,title: 'integracion de DB',dataUser});
    
 })
 
