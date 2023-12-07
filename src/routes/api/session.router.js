@@ -53,6 +53,7 @@ router.post('/sessions/register', async (req,res) => {
         email,
         age,
         password,
+        role: email === 'adminCoder@coder.com' && password === 'adminCod3e123' ? 'admin' : 'user'
     });
     
     res.redirect('/api/login')
