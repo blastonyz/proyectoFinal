@@ -1,18 +1,24 @@
 import express from 'express';
-import productRouter from "./routes/productRoute.js";
-import cartRouter from "./routes/views/cartRoutes.js";
-import path from 'path';
-import { __dirname } from './utils.js';
 import handlebars from 'express-handlebars';
+import sessions from 'express-session';
+import MongoStore from 'connect-mongo';
+import passport from 'passport';
+
+import { URI } from './db/mongoose.js';
+import { __dirname } from './utils.js';
+import path from 'path';
+import {init as initPassport} from './passport/passport.config.js'
+
+import cartRouter from "./routes/views/cartRoutes.js"
+import productRouter from "./routes/productRoute.js";
 import productManager from './productManager.js';
 import viewsRoutes from './routes/viewsRoutes.js';
 import indexRouter from './routes/views/index.router.js';
 import chatRouter from './routes/views/chat.router.js';
-import { URI } from './db/mongoose.js';
-import sessions from 'express-session';
-import sessionRender from './routes/views/sessions.render.js'
-import MongoStore from 'connect-mongo'
 import sessionRouter from './routes/api/session.router.js'
+import sessionRender from './routes/views/sessions.render.js'
+
+
 
 const SESSION_SECRET = 'W9=WyrbA9(8^';
 
@@ -36,6 +42,9 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 
+initPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 //persistencia con websocket
 app.get('/home',async (req,res) => {

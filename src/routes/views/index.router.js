@@ -1,5 +1,4 @@
 import {Router} from 'express';
-//import ProductsManager from '../../dao/ProductManagerMdb.js';
 import ProductModel from '../../models/products.model.js';
 
 const router = Router();
@@ -35,10 +34,14 @@ router.get('/productsdb', async(req,res) => {
       
    }
    
-   const dataUser = req.session.user;
+   const dataUser = req.user;
+   console.log(dataUser)
+   const dataNew = {
+      first_name: dataUser.first_name,
+      last_name: dataUser.last_name
+   }
    const data = buildResponse({...products,sort,search});
-   console.log(data);
-   res.render('productsdb' ,{...data,title: 'integracion de DB',dataUser});
+   res.render('productsdb' ,{...data,title: 'integracion de DB',dataNew});
    
 })
 

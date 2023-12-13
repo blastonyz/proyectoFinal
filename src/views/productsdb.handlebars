@@ -1,4 +1,4 @@
-<h1>Bienvenido {{dataUser.first_name}} {{dataUser.last_name}}</h1>
+<h1>Bienvenido {{dataNew.first_name}} {{dataNew.last_name}}</h1>
 
 
 <h1>Lista de Productos</h1>
@@ -16,9 +16,9 @@
             <p>{{this.stock}}</p>
             <p>{{this.statusP}}</p>
 
-            <form id="addCart" action="/api/carts" method="post" data-id="{{this._id}}" >
-                <input type="number" id="quantity" placeholder="0">
-            <button onclick="addProduct('{{this._id}}')">Agregar</button>
+            <form id="addCart" data-id="{{this._id}}" >
+                <input type="number" id="quantityIn" placeholder="0">
+            <button type="submit">Agregar</button>
             </form>
             </article>
         </div>

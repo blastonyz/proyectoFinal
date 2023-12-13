@@ -1,11 +1,9 @@
 
-
-const formAddCart = document.getElementById('addCart')
-document.addEventListener('addProduct', async(event) => {
+document.addEventListener('submit', function (event)  {
     event.preventDefault();
-
-            const productId = form.getAttribute('data-id');
-            const quantityInput = document.getElementById('quantity');
+            const form = event.target;
+             const productId = form.getAttribute('data-id');
+             const quantityInput = document.getElementById('quantityIn');
             console.log(quantityInput,productId);
             const quantity = parseInt(quantityInput.value);
             console.log(productId,quantity);
@@ -31,7 +29,7 @@ document.addEventListener('addProduct', async(event) => {
              });
                  
             }
-          addProduct(_id,quantity);
+          addProduct(productId,quantity);
     });
     
-
+// const quantityInput = document.getElementById(`${"quantity"+productId}`);
