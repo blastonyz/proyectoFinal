@@ -15,7 +15,7 @@ regForm.addEventListener('submit', (event) =>{
         password
     };
 
-    fetch('/api/sessions/register',{
+    fetch('/sessions/register',{
         method: 'POST',
         body: JSON.stringify(user),
         headers: {

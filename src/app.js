@@ -23,6 +23,9 @@ import sessionRender from './routes/views/sessions.render.js'
 const SESSION_SECRET = 'W9=WyrbA9(8^';
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(express.static(path.join(__dirname,'../public')));
 
 app.use(sessions({
     store: MongoStore.create({
@@ -34,30 +37,34 @@ app.use(sessions({
     saveUninitialized: true,
 }))
 
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-app.use(express.static(path.join(__dirname,'../public')))
+
+
+initPassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 
-initPassport();
-app.use(passport.initialize());
-app.use(passport.session());
+
 
 //persistencia con websocket
 app.get('/home',async (req,res) => {
     const product = await productManager.getProducts();
     res.render('index' , { title: 'handlebars y socket.io',product});
 });
-//login
-app.use('/api', sessionRender, sessionRouter);
-//realtime, websocket y mongoDB
-app.use('/', viewsRoutes);
 //persistencia de archivos
 app.use('/old',productRouter);
 
+app.get('/', (req,res) =>{
+    res.redirect('/login')
+})
+//login
+app.use('/', sessionRender, sessionRouter);
+//realtime, websocket y mongoDB
+app.use('/', viewsRoutes);
+//vista de carts
 app.use('/api',cartRouter);
 //paginacion
 app.use('/api',indexRouter);

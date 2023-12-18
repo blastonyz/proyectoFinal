@@ -49,19 +49,25 @@ passport.use('login', new LocalStrategy({usernameField: 'email'},async (email, p
         }
         done(null, user);
 }));
+
 const githubOpts = {
     clientID: 'Iv1.6f5ab4fc06090141',
-    clientSecret: 'efd67deb72fb66c45de06fa56dacb9f0b2d64385',
-    callbackURL: 'http://localhost:8080/api/sessions/github/callback'
-}
-passport.use('github', new GithubStrategy(githubOpts, async(accestoken, refreshToken, profile, done) =>{
+    clientSecret: '2f643dad7c1c3cf06e255a85805a55687657ad06',
+    callbackURL: 'http://localhost:8080/sessions/github/callback',
+    
+};
+
+passport.use('github', new GithubStrategy(githubOpts, async (accesstoken, refreshToken, profile, done) => {
+    console.log(profile);
     const email = profile._json.email;
+    console.log(email);
     let user = await UserModel.findOne({ email });
+    console.log(user);
     if(user){
-        return done(mull, user);
+        return done(null, user);
     }
     user = {
-        first_name: profile._json.first_name,
+        first_name: profile._json.name,
         last_name:'' ,
         email,
         age: 20,
@@ -69,14 +75,20 @@ passport.use('github', new GithubStrategy(githubOpts, async(accestoken, refreshT
     }
     const newUser = await UserModel.create(user);
     done(null, newUser);
-}))
+}));
 
     passport.serializeUser((user,done) =>{
-        done(null, user._id)
+        if (user) {
+            done(null, user._id);
+        } else {
+            done(new Error('User is null or undefined'));
+        }
+    
     });
 
     passport.deserializeUser(async (uid, done) =>{
         const user = await UserModel.findById(uid);
+        console.log('deserialize', user)
         done(null, user);
     })
 }
