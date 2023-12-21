@@ -2,6 +2,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy} from 'passport-local';
 import { Strategy as GithubStrategy } from 'passport-github2';
 import UserModel from '../models/users.model.js';
+import CartModel from '../models/carts.models.js';
 import { createHash, isValidPassword } from '../utils.js';
 
 
@@ -27,14 +28,17 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
     if (user){
         return done(new Error(`Ya existe un usuario con ${email} registrado`))
     }
-
+    const newCart = await CartModel.create({products:[]});
+    const cartID = newCart._id.toString();
+    console.log(cartID);
     const newUser = await UserModel.create({
         first_name,
         last_name,
         email,
         age,
         password: createHash(password),
-        role: email === 'adminCoder@coder.com' && password === 'adminCod3e123' ? 'admin' : 'user'
+        role: email === 'adminCoder@coder.com' && password === 'adminCod3e123' ? 'admin' : 'user',
+        cart: cartID
     });
     done(null,newUser);
 }))

@@ -10,17 +10,19 @@ const router = Router();
 router.post('/carts', async (req,res) => {
 //crea y añade a mongodb
     const { productId, quantity } = req.body;
+    const user = req.user;
+    const cartId = user.cart;
+    console.log(cartId);
     try {
     
-          let existingCart = await CartModel.findOne();
-          console.log(existingCart);
+          let existingCart = await CartModel.findById(cartId);
+         
           
           if(!existingCart){   
-          let cart = await CartModel.create({ products: [{prodId: productId,quantity:quantity}] });
-          res.status(201).json({ message: 'carrito creado exitosamente' ,cart});
+          res.status(201).json({ message: 'carrito o usuario no encontrados' });
           }else{
             let existProductInd =  existingCart.products.findIndex( (p) => p.prodId && p.prodId.toString()   === productId );
-            console.log(existProductInd);
+            console.log('indice',existProductInd);
               if(existProductInd < 0){
                const added = await CartModel.updateOne({
                     _id: existingCart._id,},{
@@ -149,3 +151,48 @@ const cId = req.params.cid;
 
 
 export default router;
+
+
+/*
+
+router.post('/carts', async (req,res) => {
+//crea y añade a mongodb
+    const { productId, quantity } = req.body;
+    try {
+    
+          let existingCart = await CartModel.findOne();
+          console.log(existingCart);
+          
+          if(!existingCart){   
+          let cart = await CartModel.create({ products: [{prodId: productId,quantity:quantity}] });
+          res.status(201).json({ message: 'carrito creado exitosamente' ,cart});
+          }else{
+            let existProductInd =  existingCart.products.findIndex( (p) => p.prodId && p.prodId.toString()   === productId );
+            console.log(existProductInd);
+              if(existProductInd < 0){
+               const added = await CartModel.updateOne({
+                    _id: existingCart._id,},{
+                   $push:{products: {prodId: productId,quantity:quantity}}
+                    }
+                   );
+                   res.status(201).json({ message: 'carrito actualizado' ,added});
+              }else{
+              existingCart.products[existProductInd] = {prodId: existingCart.products[existProductInd].prodId, quantity: existingCart.products[existProductInd].quantity + quantity };
+              
+              await CartModel.updateOne({
+                _id: existingCart._id,},
+               
+               {products: existingCart.products }
+                
+               );
+               res.status(201).json({ message: 'cantidad actualizada' ,existingCart})
+              }
+        }
+        } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: 'error', message: 'Error al agregar producto al carrito' });
+    
+        }
+    
+});
+*/ 

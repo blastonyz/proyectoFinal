@@ -3,16 +3,24 @@ document.addEventListener('submit', function (event)  {
     event.preventDefault();
             const form = event.target;
              const productId = form.getAttribute('data-id');
-             const quantityInput = document.getElementById('quantityIn');
+             const quantityInput = document.getElementById(`${"quantityIn"+productId}`);
             console.log(quantityInput,productId);
-            const quantity = parseInt(quantityInput.value);
-            console.log(productId,quantity);
-            async function addProduct(productId,quantity){
+            const quantityAd = parseInt(quantityInput.value);
+            console.log('productId:', productId);
+            console.log('quantityInput:', quantityInput);
+            console.log('quantityAd:', quantityAd);
+        
+            if (isNaN(quantityAd) || quantityAd <= 0) {
+                console.log('Cantidad inválida');
+                return;
+            }
+            console.log(productId,quantityAd);
+            async function addProduct(productId,quantityAd){
                 const data = {
                     productId,
-                    quantity:quantity
+                    quantity:quantityAd
                 };
-            
+                
                 // Enviar la información al servidor
                 fetch('/api/carts', {
                     method: 'POST',
@@ -29,7 +37,7 @@ document.addEventListener('submit', function (event)  {
              });
                  
             }
-          addProduct(productId,quantity);
+          addProduct(productId,quantityAd);
     });
     //manejo logout
     document.getElementById('logoutButton').addEventListener('click', function () {
