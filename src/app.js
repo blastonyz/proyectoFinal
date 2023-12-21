@@ -54,12 +54,13 @@ app.get('/home',async (req,res) => {
     const product = await productManager.getProducts();
     res.render('index' , { title: 'handlebars y socket.io',product});
 });
-//persistencia de archivos
+//persistencia de archivos JSON local
 app.use('/old',productRouter);
-
+//middleware de ruta
 app.get('/', (req,res) =>{
     res.redirect('/login')
-})
+});
+//MongoDB
 //login
 app.use('/', sessionRender, sessionRouter);
 //realtime, websocket y mongoDB

@@ -27,6 +27,7 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
     if (user){
         return done(new Error(`Ya existe un usuario con ${email} registrado`))
     }
+
     const newUser = await UserModel.create({
         first_name,
         last_name,
@@ -58,9 +59,7 @@ const githubOpts = {
 };
 
 passport.use('github', new GithubStrategy(githubOpts, async (accesstoken, refreshToken, profile, done) => {
-    console.log(profile);
     const email = profile._json.email;
-    console.log(email);
     let user = await UserModel.findOne({ email });
     console.log(user);
     if(user){

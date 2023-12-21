@@ -6,9 +6,12 @@ const UserSchema = new mongoose.Schema({
     email: {type: String, required: true},
     age: {type: Number},
     password: {type: String},
-    role: {type: String, default: 'user'}
+    role: {type: String, default: 'user'},
+    
 },
 {timestamps: true}
 )
 
 export default  mongoose.model('Session',UserSchema);
+
+//cart:{type: mongoose.Schema.Types.ObjectId, ref: 'Carts'}

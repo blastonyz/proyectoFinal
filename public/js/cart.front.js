@@ -1,4 +1,4 @@
-
+//agregar producto y cantidad al carrito
 document.addEventListener('submit', function (event)  {
     event.preventDefault();
             const form = event.target;
@@ -31,5 +31,17 @@ document.addEventListener('submit', function (event)  {
             }
           addProduct(productId,quantity);
     });
-    
-// const quantityInput = document.getElementById(`${"quantity"+productId}`);
+    //manejo logout
+    document.getElementById('logoutButton').addEventListener('click', function () {
+        
+        fetch('/sessions/logout', {
+            method: 'GET',
+        })
+            .then((response) => {
+                window.location.href = response.url;
+               
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    });
