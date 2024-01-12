@@ -24,6 +24,7 @@ regForm.addEventListener('submit', (event) =>{
     })
     .then((response) => {
         console.log(response);
+        window.location.href = response.url;
     })
     .catch((err) => {
         console.log(err);

@@ -1,7 +1,7 @@
 import express from 'express';
 import { Router } from 'express';
-import CartModel from '../../models/carts.models.js'
-
+//import CartModel from '../../models/carts.models.js'
+import CartController from '../../controller/carts.controller.js'
 
 const router = Router();
 
@@ -15,16 +15,16 @@ router.post('/carts', async (req,res) => {
     console.log(cartId);
     try {
     
-          let existingCart = await CartModel.findById(cartId);
-         
+          let existingCart = await CartController.GetById(cartId);
+          console.log('carrito',existingCart);  
           
           if(!existingCart){   
-          res.status(201).json({ message: 'carrito o usuario no encontrados' });
+          res.status(404).json({ message: 'carrito o usuario no encontrados' });
           }else{
             let existProductInd =  existingCart.products.findIndex( (p) => p.prodId && p.prodId.toString()   === productId );
             console.log('indice',existProductInd);
               if(existProductInd < 0){
-               const added = await CartModel.updateOne({
+               const added = await CartController.update({
                     _id: existingCart._id,},{
                    $push:{products: {prodId: productId,quantity:quantity}}
                     }
@@ -33,7 +33,7 @@ router.post('/carts', async (req,res) => {
               }else{
               existingCart.products[existProductInd] = {prodId: existingCart.products[existProductInd].prodId, quantity: existingCart.products[existProductInd].quantity + quantity };
               
-              await CartModel.updateOne({
+              await updateOne({
                 _id: existingCart._id,},
                
                {products: existingCart.products }
@@ -57,13 +57,13 @@ router.delete('/carts/:cid/products/:pid', async (req,res) => {
     const cId = req.params.cid;
     const pId = req.params.pid;
     try {
-    let existingCart = await CartModel.findById({_id: cId});
+    let existingCart = await CartController.GetById({_id: cId});
     console.log('carrito',existingCart);
     let existProductInd = existingCart.products.findIndex( (p) => p.prodId+"" === pId );
     console.log('indice',existProductInd);
     const data = existingCart.products.splice(existProductInd,1);
     console.log('mutado',existingCart);
-    await CartModel.updateOne({
+    await CartController.update({
         _id: existingCart._id,},{
        $set:{products: existingCart.products}
         }
@@ -81,7 +81,7 @@ router.delete('/carts/:cid', async (req,res) => {
     const {cId} = req.params.cid;
     
     try {
-       const deleteCart = await CartModel.deleteOne({_id: cId});
+       const deleteCart = await CartController.delete({_id: cId});
        console.log('result',deleteCart);
         res.status(204).json(`carrito borrado ${cId}`);
     } catch (error) {
@@ -96,12 +96,12 @@ router.put('/carts/:cid', async (req,res) => {
     //actualiza products con un array
     const cId = req.params.cid;
     const { newProducts} = req.body;
-    let existingCart = await CartModel.findById({_id: cId});
+    let existingCart = await CartController.GetById({_id: cId});
     console.log(newProducts)
     if(!existingCart){
         res.status(400).json("carrito no encontrado");
     }
-    const newCart = await CartModel.updateOne({
+    const newCart = await CartController.update({
         _id: existingCart._id,},{
        $set:{products: newProducts}
         }
@@ -115,19 +115,19 @@ router.put('/carts/:cid/products/:pid', async (req,res) => {
     const pId = req.params.pid;
     const {newQuantity} = req.body;
     try {
-    let existingCart = await CartModel.findById({_id: cId});
+    let existingCart = await CartController.GetById({_id: cId});
     console.log('carrito',existingCart);
     let existProductInd = existingCart.products.findIndex( (p) => p.prodId+"" === pId );
     console.log('indice',existProductInd);
 
     existingCart.products[existProductInd] = {prodId: existingCart.products[existProductInd].prodId, quantity: newQuantity }
     console.log('mutado',existingCart);
-    await CartModel.updateOne({
+    await CartController.update({
         _id: existingCart._id,},{
        $set:{products: existingCart.products}
         }
        );
-    //no se visualiza en postman la repsuesta  
+      
     res.status(204).json({ message: 'cantidad actualizada' ,existingCart});
     }catch (error) {
         console.error('error al actualizar cantidad');
@@ -139,11 +139,14 @@ router.put('/carts/:cid/products/:pid', async (req,res) => {
 
 
 router.get('/carts/:cid', async (req,res) => {
-//muestra carrito por id,momentaneamente sin renderizar
+
 const cId = req.params.cid;
- const cartDb = await CartModel.findById({_id: cId}).populate('products.prodId');
+ const cartDb = await CartController.GetById({_id: cId}).populate('products.prodId');
+ if(!cartDb){
+    return res.status(404).json({message: 'carrito no encontrado'})
+ }
   console.log(cartDb);
-  const result = cartDb.products.map(prod =>{return { id:prod.prodId?._id, title:prod.prodId?.title, description: prod.prodId?.description, price:prod.prodId?.price, category: prod.prodId?.category, code: prod.prodId?.code, stock: prod.prodId?.stock, statusP: prod.prodId?.statusP }})
+  const result = cartDb.products.map(prod =>{return { id:prod.prodId?._id, title:prod.prodId?.title, description: prod.prodId?.description, price:prod.prodId?.price, category: prod.prodId?.category, code: prod.prodId?.code, stock: prod.prodId?.stock, statusP: prod.prodId?.statusP, quantity: prod.prodId?.quantity }})
  res.render('cart' , { title: 'cart',cartDb: result});
 });
 
@@ -151,48 +154,3 @@ const cId = req.params.cid;
 
 
 export default router;
-
-
-/*
-
-router.post('/carts', async (req,res) => {
-//crea y añade a mongodb
-    const { productId, quantity } = req.body;
-    try {
-    
-          let existingCart = await CartModel.findOne();
-          console.log(existingCart);
-          
-          if(!existingCart){   
-          let cart = await CartModel.create({ products: [{prodId: productId,quantity:quantity}] });
-          res.status(201).json({ message: 'carrito creado exitosamente' ,cart});
-          }else{
-            let existProductInd =  existingCart.products.findIndex( (p) => p.prodId && p.prodId.toString()   === productId );
-            console.log(existProductInd);
-              if(existProductInd < 0){
-               const added = await CartModel.updateOne({
-                    _id: existingCart._id,},{
-                   $push:{products: {prodId: productId,quantity:quantity}}
-                    }
-                   );
-                   res.status(201).json({ message: 'carrito actualizado' ,added});
-              }else{
-              existingCart.products[existProductInd] = {prodId: existingCart.products[existProductInd].prodId, quantity: existingCart.products[existProductInd].quantity + quantity };
-              
-              await CartModel.updateOne({
-                _id: existingCart._id,},
-               
-               {products: existingCart.products }
-                
-               );
-               res.status(201).json({ message: 'cantidad actualizada' ,existingCart})
-              }
-        }
-        } catch (error) {
-        console.error(error);
-        res.status(500).json({ status: 'error', message: 'Error al agregar producto al carrito' });
-    
-        }
-    
-});
-*/ 

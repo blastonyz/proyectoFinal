@@ -1,11 +1,9 @@
 import express from 'express'
 import { Router } from 'express';
 const router = Router();
-import productManager from '../productManager.js';
+import productManager from '../dao/productManager.js';
 import {v4 as uuidV4} from 'uuid';
 import fs from 'fs'
-import {pid} from 'process';
-import {emit, socketServer} from '../socket.js'
 const path = './productos.json';
 
 
@@ -90,10 +88,3 @@ router.delete('/product/delete/:pId', async (req,res) =>{
 })
 export default router;
 
-/*const express = require('express');
-const {Router} = require('express')
-const router = Router();
-const productManager  = require('../productManager');
-const { v4: uuidV4} = require('uuid');
-const fs = require('fs');
-const { pid } = require('process');*/

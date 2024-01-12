@@ -4,23 +4,23 @@ import sessions from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
 
-import { URI } from './db/mongoose.js';
 import { __dirname } from './utils.js';
 import path from 'path';
-import {init as initPassport} from './passport/passport.config.js'
+import {init as initPassport} from './passport/passport.config.js';
+import config from './config/config.js';
 
 import cartRouter from "./routes/views/cartRoutes.js"
 import productRouter from "./routes/productRoute.js";
-import productManager from './productManager.js';
+import productManager from './dao/productManager.js';
 import viewsRoutes from './routes/viewsRoutes.js';
 import indexRouter from './routes/views/index.router.js';
-import chatRouter from './routes/views/chat.router.js';
+import chatRouter from './routes/api/chat.router.js';
 import sessionRouter from './routes/api/session.router.js'
 import sessionRender from './routes/views/sessions.render.js'
 
 
 
-const SESSION_SECRET = 'W9=WyrbA9(8^';
+const SESSION_SECRET = config.session_secret;
 
 const app = express();
 app.use(express.json());
@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname,'../public')));
 
 app.use(sessions({
     store: MongoStore.create({
-       mongoUrl: URI,
+       mongoUrl: config.mongodbUri,
        mongoOptions: {}, 
     }),
     secret: SESSION_SECRET,
@@ -49,7 +49,7 @@ app.set('view engine', 'handlebars');
 
 
 
-//persistencia con websocket
+//persistencia archivo con websocket
 app.get('/home',async (req,res) => {
     const product = await productManager.getProducts();
     res.render('index' , { title: 'handlebars y socket.io',product});
@@ -78,6 +78,7 @@ app.use((error,req,res,next) => {
     res.status(500).json({message});
     next();
 })
+
 
  export default app;
 

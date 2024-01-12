@@ -4,6 +4,10 @@ export default class ProductManagerMdb{
     static get(){
         return ProductModel.find();
     }
+    static async getPaginated(criterials, options){
+        const productPaginated = await ProductModel.paginate(criterials,options);
+        return productPaginated;
+    }
     static async getById(sid){
         const product = await ProductModel.findById(sid);
         if(!product){

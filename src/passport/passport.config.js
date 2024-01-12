@@ -2,7 +2,8 @@ import passport from 'passport';
 import { Strategy as LocalStrategy} from 'passport-local';
 import { Strategy as GithubStrategy } from 'passport-github2';
 import UserModel from '../models/users.model.js';
-import CartModel from '../models/carts.models.js';
+import CartController from '../controller/carts.controller.js';
+//import CartModel from '../models/carts.models.js';
 import { createHash, isValidPassword } from '../utils.js';
 
 
@@ -28,7 +29,7 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
     if (user){
         return done(new Error(`Ya existe un usuario con ${email} registrado`))
     }
-    const newCart = await CartModel.create({products:[]});
+    const newCart = await CartController.create({products:[]});
     const cartID = newCart._id.toString();
     console.log(cartID);
     const newUser = await UserModel.create({
@@ -40,6 +41,7 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
         role: email === 'adminCoder@coder.com' && password === 'adminCod3e123' ? 'admin' : 'user',
         cart: cartID
     });
+    console.log('newUser',newUser);
     done(null,newUser);
 }))
 
@@ -52,6 +54,7 @@ passport.use('login', new LocalStrategy({usernameField: 'email'},async (email, p
         if(isNotValidPassword){
             return done(new Error('Correo o Contraseña invalidos'));
         }
+        console.log('user', user);
         done(null, user);
 }));
 
@@ -91,7 +94,6 @@ passport.use('github', new GithubStrategy(githubOpts, async (accesstoken, refres
 
     passport.deserializeUser(async (uid, done) =>{
         const user = await UserModel.findById(uid);
-        console.log('deserialize', user)
         done(null, user);
     })
 }

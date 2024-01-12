@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import ProductModel from '../../models/products.model.js';
+import ProductController from '../../controller/products.controller.js';
 
 const router = Router();
 
@@ -15,7 +16,7 @@ router.get('/productsdb', async(req,res) => {
    if(search){
       criterials.category = search;
    }
-   const products = await ProductModel.paginate(criterials,options);
+   const products = await ProductController.getPaginated(criterials,options);
 
    const buildResponse = (prods) => {
       return{
