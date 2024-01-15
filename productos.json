@@ -1,6 +1,6 @@
 [
 	{
-		"id": "4f6c7b01-e1d7-4e45-ba4d-6126c74e2648",
+		"id": "9d11a222-3f21-4a1b-b912-11df4ba1abaf",
 		"title": "Taladro Makita",
 		"description": "Rotopercutor",
 		"price": 60000,
@@ -11,7 +11,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "621a2a47-53f2-4909-af6d-6d1a27fdc57b",
+		"id": "ec180f96-17e6-461b-83fd-6c6944877c1a",
 		"title": "Lijadora Orbital",
 		"description": "5 velocidades",
 		"price": 35000,
@@ -22,7 +22,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "3f93d659-6fad-4513-880e-6211c556fecb",
+		"id": "e1f7e442-fe08-4f80-92b3-4a1d304c128c",
 		"title": "Compresor Daewo",
 		"description": "1/2hp",
 		"price": 55000,
@@ -33,7 +33,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "4e1d3c4a-f1cb-4102-b565-c1b0ae8d4a25",
+		"id": "0d0f82e9-c33f-44b7-bc36-e37680cd63e9",
 		"title": "Amoladora Stanley",
 		"description": "2 1/2",
 		"price": 52000,
@@ -44,7 +44,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "374eed4e-c071-445a-8ef7-9e379361f39f",
+		"id": "bec1f348-e98d-4800-8a06-f88ad8dc4a58",
 		"title": "Caladora Marolio",
 		"description": "le da sabor a tu vida",
 		"price": 2500,
@@ -55,7 +55,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "d1dd43fd-786d-4e13-b98c-2f7b5a106a15",
+		"id": "34fedf83-e720-41be-86d7-4b84d414b8a2",
 		"title": "Inflador ACME",
 		"description": "sin garantia",
 		"price": 1800,
@@ -66,7 +66,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "bb1eb7c9-073c-4772-b49e-7c54fd5054f5",
+		"id": "0aec02be-2567-4ede-8a0c-1f7f449fedb3",
 		"title": "Taladro p/Drywalt Bosch",
 		"description": "700w",
 		"price": 25000,
@@ -77,7 +77,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "e2501896-f095-48ce-ad70-2aa9c84963db",
+		"id": "d9bf65dc-c6fc-43e6-93c4-9d3dfab92bbd",
 		"title": "Termofusora Noderrit",
 		"description": "1500w",
 		"price": 35000,
@@ -88,7 +88,7 @@
 		"thumbnail": []
 	},
 	{
-		"id": "bb0ebb62-7b55-4462-a07c-c0933d22355d",
+		"id": "54e5d5a0-26b3-40dd-84bd-40dc624a1e16",
 		"title": "Motosierra Truchan",
 		"description": "Z50",
 		"price": 21000,
@@ -97,9 +97,9 @@
 		"stock": 25,
 		"statusP": true,
 		"thumbnail": []
-	},
-	{
-		"id": "ec529aa9-4f67-4d84-883d-59dde3e14335",
+	}
+]	{
+		"id": "7fa1f654-5bff-4e7e-9293-9ce072bdbc31",
 		"title": "Soldadora Luqstoff",
 		"description": "2500w",
 		"price": 95000,
