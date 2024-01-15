@@ -12,10 +12,12 @@ router.post('/carts', async (req,res) => {
     const { productId, quantity } = req.body;
     const user = req.user;
     const cartId = user.cart;
-    console.log(cartId);
+    console.log('cartID',cartId);
+    console.log('requser',user);
     try {
     
           let existingCart = await CartController.GetById(cartId);
+
           console.log('carrito',existingCart);  
           
           if(!existingCart){   
@@ -33,7 +35,7 @@ router.post('/carts', async (req,res) => {
               }else{
               existingCart.products[existProductInd] = {prodId: existingCart.products[existProductInd].prodId, quantity: existingCart.products[existProductInd].quantity + quantity };
               
-              await updateOne({
+              await CartController.update({
                 _id: existingCart._id,},
                
                {products: existingCart.products }
