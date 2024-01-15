@@ -1,7 +1,8 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy} from 'passport-local';
 import { Strategy as GithubStrategy } from 'passport-github2';
-import UserModel from '../models/users.model.js';
+//import UserModel from '../models/users.model.js';
+import UsersController from '../controller/users.controller.js';
 import CartController from '../controller/carts.controller.js';
 //import CartModel from '../models/carts.models.js';
 import { createHash, isValidPassword } from '../utils.js';
@@ -25,14 +26,14 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
     if(!first_name || !last_name || !email ||  !age || !password){
         return done(new Error( 'Todos los campos son requeridos'));
     }
-    const user = await UserModel.findOne({email});
+    const user = await UsersController.findByEmail({email});
     if (user){
         return done(new Error(`Ya existe un usuario con ${email} registrado`))
     }
     const newCart = await CartController.create({products:[]});
     const cartID = newCart._id.toString();
-    console.log(cartID);
-    const newUser = await UserModel.create({
+    console.log('cartID',cartID);
+    const newUser = await UsersController.createUser({
         first_name,
         last_name,
         email,
@@ -46,7 +47,7 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
 }))
 
 passport.use('login', new LocalStrategy({usernameField: 'email'},async (email, password, done) => {
-        const user = await UserModel.findOne({email});
+        const user = await UsersController.findByEmail({email});
         if(!user){
             return done(new Error('Correor o contraseña invalidos'))
         }
@@ -67,7 +68,7 @@ const githubOpts = {
 
 passport.use('github', new GithubStrategy(githubOpts, async (accesstoken, refreshToken, profile, done) => {
     const email = profile._json.email;
-    let user = await UserModel.findOne({ email });
+    let user = await UsersController.findByEmail({ email });
     console.log(user);
     if(user){
         return done(null, user);
@@ -79,7 +80,7 @@ passport.use('github', new GithubStrategy(githubOpts, async (accesstoken, refres
         age: 20,
         password: ''
     }
-    const newUser = await UserModel.create(user);
+    const newUser = await UsersController.createUser(user);
     done(null, newUser);
 }));
 
@@ -93,7 +94,7 @@ passport.use('github', new GithubStrategy(githubOpts, async (accesstoken, refres
     });
 
     passport.deserializeUser(async (uid, done) =>{
-        const user = await UserModel.findById(uid);
+        const user = await UsersController.findById(uid);
         done(null, user);
     })
 }

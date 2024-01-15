@@ -3,6 +3,7 @@ import CartModel from '../models/carts.models.js';
 export default class CartController{
     static GetById(cartId){
         return CartModel.findById(cartId);
+        
     }
 
     static create({}){

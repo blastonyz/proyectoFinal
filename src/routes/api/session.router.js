@@ -2,6 +2,7 @@ import { Router } from "express";
 import passport from 'passport';
 import { createHash } from "../../utils.js";
 import UsersModel from "../../models/users.model.js";
+import UsersController from "../../controller/users.controller.js";
 
 
 
@@ -32,9 +33,9 @@ router.post('/sessions/recovery-password',async (req,res) =>{
     if(!email || !password){
         return res.render('error', {messageError: 'Todos los campos son requeridos'});
     }
-    const user = await UsersModel.findOne({email});
+    const user = await UsersController.findByEmail({email});
     user.password = createHash(password);
-    await UsersModel.updateOne({email}, user);
+    await UsersController.updateUser({email}, user);
     res.redirect('/login');
 })
 router.get('/sessions/logout', (req,res) => {
