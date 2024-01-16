@@ -1,20 +1,20 @@
-import CartModel from '../models/carts.models.js';
+import CartDao from '../dao/carts.dao.js';
 
 export default class CartController{
     static GetById(cartId){
-        return CartModel.findById(cartId);
+        return CartDao.getById(cartId);
         
     }
 
     static create({}){
-        return CartModel.create({});
+        return CartDao.create({});
     }
 
     static update(_id,update){
-        return CartModel.updateOne({_id},update);
+        return CartDao.update(_id,update);
     }
 
     static delete(_id){
-        return CartModel.deleteOne({_id});
+        return CartDao.delete(_id);
     }
 }

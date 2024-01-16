@@ -38,6 +38,7 @@ document.addEventListener('submit', function (event)  {
                  
             }
           addProduct(productId,quantityAd);
+          quantityInput.value = '';
     });
     //manejo logout
     document.getElementById('logoutButton').addEventListener('click', function () {

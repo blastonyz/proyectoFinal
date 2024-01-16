@@ -1,6 +1,5 @@
 import express from 'express';
 import { Router } from 'express';
-//import CartModel from '../../models/carts.models.js'
 import CartController from '../../controller/carts.controller.js'
 
 const router = Router();
@@ -80,12 +79,12 @@ router.delete('/carts/:cid/products/:pid', async (req,res) => {
 
 router.delete('/carts/:cid', async (req,res) => {
     //eliminar el carrito completo
-    const {cId} = req.params.cid;
+    const {cid} = req.params;
     
     try {
-       const deleteCart = await CartController.delete({_id: cId});
+       const deleteCart = await CartController.delete({_id: cid});
        console.log('result',deleteCart);
-        res.status(204).json(`carrito borrado ${cId}`);
+        res.status(204).json(`carrito borrado ${cid}`);
     } catch (error) {
         console.error('error al borrar');
         res.status(400).json('error')
@@ -117,18 +116,18 @@ router.put('/carts/:cid/products/:pid', async (req,res) => {
     const pId = req.params.pid;
     const {newQuantity} = req.body;
     try {
-    let existingCart = await CartController.GetById({_id: cId});
+    let existingCart = await CartController.GetById(cId);
     console.log('carrito',existingCart);
+    if (!existingCart) {
+        return res.status(404).json({ message: 'Carrito no encontrado' });
+    }
     let existProductInd = existingCart.products.findIndex( (p) => p.prodId+"" === pId );
     console.log('indice',existProductInd);
-
-    existingCart.products[existProductInd] = {prodId: existingCart.products[existProductInd].prodId, quantity: newQuantity }
+   existingCart.products[existProductInd].quantity = newQuantity;
     console.log('mutado',existingCart);
-    await CartController.update({
-        _id: existingCart._id,},{
-       $set:{products: existingCart.products}
-        }
-       );
+    await CartController.update(cId, {
+        $set:{products: existingCart.products}
+         });
       
     res.status(204).json({ message: 'cantidad actualizada' ,existingCart});
     }catch (error) {
@@ -156,3 +155,33 @@ const cId = req.params.cid;
 
 
 export default router;
+
+
+/*router.put('/carts/:cid/products/:pid', async (req,res) => {
+    //actualiza solo cantidad
+    const cId = req.params.cid;
+    const pId = req.params.pid;
+    const {newQuantity} = req.body;
+    try {
+    let existingCart = await CartController.GetById({_id: cId});
+    console.log('carrito',existingCart);
+    let existProductInd = existingCart.products.findIndex( (p) => p.prodId+"" === pId );
+    console.log('indice',existProductInd);
+
+    existingCart.products[existProductInd] = {prodId: existingCart.products[existProductInd].prodId, quantity: newQuantity }
+    console.log('mutado',existingCart);
+    await CartController.update({
+        _id: existingCart._id,},{
+       $set:{products: existingCart.products}
+        }
+       );
+      
+    res.status(204).json({ message: 'cantidad actualizada' ,existingCart});
+    }catch (error) {
+        console.error('error al actualizar cantidad');
+        res.status(500).json('error')
+    }
+   
+});
+
+*/
