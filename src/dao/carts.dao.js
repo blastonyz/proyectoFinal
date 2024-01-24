@@ -1,6 +1,7 @@
 import CartModel from '../models/carts.models.js';
+import CartRepository from '../repository/carts.repository.js';
 
-export default class CartDao{
+export default class CartDao extends CartRepository{
     static getById(cartId){
         return CartModel.findById(cartId);
         
@@ -16,5 +17,8 @@ export default class CartDao{
 
     static delete(_id){
         return CartModel.deleteOne({_id});
+    }
+    static getPopulate(_id){
+        return   CartModel.findById(_id).populate('products.prodId')
     }
 }

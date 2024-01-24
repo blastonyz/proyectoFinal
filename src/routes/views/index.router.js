@@ -1,6 +1,7 @@
 import {Router} from 'express';
-import ProductModel from '../../models/products.model.js';
 import ProductController from '../../controller/products.controller.js';
+import UsersDTO from '../../dto/users.dto.js';
+import EmailServices from '../../services/mail.services.js';
 
 const router = Router();
 
@@ -35,15 +36,22 @@ router.get('/productsdb', async(req,res) => {
       
    }
    
-   const dataUser = req.user;
-   console.log(dataUser)
-   const dataNew = {
-      first_name: dataUser.first_name,
-      last_name: dataUser.last_name
-   }
+   const dataUserDTO = new UsersDTO(req.user);
+   console.log(dataUserDTO)
+ 
    const data = buildResponse({...products,sort,search});
-   res.render('productsdb' ,{...data,title: 'integracion de DB',dataNew});
+   res.render('productsdb' ,{...data,title: 'integracion de DB',dataUserDTO});
    
+})
+
+router.get('/mail', async (req,res) =>{
+   const emailService = EmailServices.getInstance();
+   const result = await emailService.sendEmail(
+      'blastonyzamora@gmail.com',
+      'Hola desde la app',
+      '<h1>Hola desde el mail service</h1>'
+   );
+   res.status(200).json(result);
 })
 
 export default router;

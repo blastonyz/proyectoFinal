@@ -1,19 +1,22 @@
-import UsersModel from '../models/users.model.js';
+import UsersDao from '../dao/users.dao.js';
+import UsersRepository from '../repository/users.repository.js';
+
+const usersRepository = new UsersRepository(UsersDao)
 
 export default class UsersController {
 
     static findByEmail(email){
-        return UsersModel.findOne(email);
+        return usersRepository.findByEmail(email);
     }
     static findById(uid){
-        return UsersModel.findById(uid);
+        return usersRepository.findById(uid);
     }
 
     static createUser(newUser){
-        return UsersModel.create(newUser);
+        return usersRepository.createUser(newUser);
     }
 
     static updateUser(email,user){
-        return UsersModel.updateOne(email,user);
+        return usersRepository.updateOne(email,user);
     }
 }

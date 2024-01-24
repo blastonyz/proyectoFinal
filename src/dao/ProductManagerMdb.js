@@ -1,7 +1,8 @@
-import ProductModel from '../models/products.model.js'
+import ProductModel from '../models/products.model.js';
+import ProductsRepository from '../repository/products.repository.js';
 
-export default class ProductManagerMdb{
-    static get(){
+export default class ProductManagerMdb extends ProductsRepository{
+    static async get(){
         return ProductModel.find();
     }
     static async getPaginated(criterials, options){
@@ -27,5 +28,10 @@ export default class ProductManagerMdb{
     static async deleteById(sid){
         await ProductModel.deleteOne({_id: sid});
         console.log(`Producto eliminado: ${sid}`)
+    }
+    static async findAndUpdate(sid,data){
+        const updatedProduct = await ProductModel.findByIdAndUpdate(sid, { $set: data }, { new: true });
+        console.log(`Producto del id actualizado: ${sid}`);
+        return updatedProduct;
     }
 }

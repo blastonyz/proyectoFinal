@@ -4,7 +4,7 @@ import sessions from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
 
-import { __dirname } from './utils.js';
+import { __dirname, authRolesMiddleware } from './utils.js';
 import path from 'path';
 import {init as initPassport} from './passport/passport.config.js';
 import config from './config/config.js';
@@ -49,12 +49,12 @@ app.set('view engine', 'handlebars');
 
 
 
-//persistencia archivo con websocket
+//persistencia de memoria con websocket
 app.get('/home',async (req,res) => {
     const product = await productManager.getProducts();
     res.render('index' , { title: 'handlebars y socket.io',product});
 });
-//persistencia de archivos JSON local
+//persistencia de memoria JSON local
 app.use('/old',productRouter);
 //middleware de ruta
 app.get('/', (req,res) =>{
@@ -63,14 +63,19 @@ app.get('/', (req,res) =>{
 //MongoDB
 //login
 app.use('/', sessionRender, sessionRouter);
-//realtime, websocket y mongoDB
-app.use('/', viewsRoutes);
-//vista de carts
-app.use('/api',cartRouter);
+
 //paginacion
 app.use('/api',indexRouter);
+
+//vista de carts
+app.use('/api',authRolesMiddleware(['user']),cartRouter);
+
 //chat
-app.use('/api',chatRouter);
+app.use('/api',authRolesMiddleware(['user']),chatRouter);
+
+//realtime, websocket y mongoDB
+app.use('/set',viewsRoutes);
+
 
 app.use((error,req,res,next) => {
     const message = `error desconocido: ${error.message}`;

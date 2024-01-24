@@ -1,6 +1,7 @@
 import express from 'express';
 import { Router } from 'express';
-import CartController from '../../controller/carts.controller.js'
+import CartController from '../../controller/carts.controller.js';
+import TicketsController from '../../services/tickets.controller.js';
 
 const router = Router();
 
@@ -8,81 +9,39 @@ const router = Router();
 
 router.post('/carts', async (req,res) => {
 //crea y añade a mongodb
-    const { productId, quantity } = req.body;
-    const user = req.user;
-    const cartId = user.cart;
-    console.log('cartID',cartId);
-    console.log('requser',user);
-    try {
-    
-          let existingCart = await CartController.GetById(cartId);
-
-          console.log('carrito',existingCart);  
-          
-          if(!existingCart){   
-          res.status(404).json({ message: 'carrito o usuario no encontrados' });
-          }else{
-            let existProductInd =  existingCart.products.findIndex( (p) => p.prodId && p.prodId.toString()   === productId );
-            console.log('indice',existProductInd);
-              if(existProductInd < 0){
-               const added = await CartController.update({
-                    _id: existingCart._id,},{
-                   $push:{products: {prodId: productId,quantity:quantity}}
-                    }
-                   );
-                   res.status(201).json({ message: 'carrito actualizado' ,added});
-              }else{
-              existingCart.products[existProductInd] = {prodId: existingCart.products[existProductInd].prodId, quantity: existingCart.products[existProductInd].quantity + quantity };
-              
-              await CartController.update({
-                _id: existingCart._id,},
-               
-               {products: existingCart.products }
-                
-               );
-               res.status(201).json({ message: 'cantidad actualizada' ,existingCart})
-              }
-        }
-        } catch (error) {
-        console.error(error);
-        res.status(500).json({ status: 'error', message: 'Error al agregar producto al carrito' });
-    
-        }
-    
+const { productId, quantity } = req.body;
+const user = req.user;
+const cartId = user.cart;
+console.log('requser',user);
+try {
+    const newCart = await CartController.createCart(productId, quantity,cartId);
+    res.status(200).json(newCart);
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+}
 });
 
 
 
 router.delete('/carts/:cid/products/:pid', async (req,res) => {
     //eliminar el producto seleccionado del carrito
-    const cId = req.params.cid;
+    const _id = req.params.cid;
     const pId = req.params.pid;
     try {
-    let existingCart = await CartController.GetById({_id: cId});
-    console.log('carrito',existingCart);
-    let existProductInd = existingCart.products.findIndex( (p) => p.prodId+"" === pId );
-    console.log('indice',existProductInd);
-    const data = existingCart.products.splice(existProductInd,1);
-    console.log('mutado',existingCart);
-    await CartController.update({
-        _id: existingCart._id,},{
-       $set:{products: existingCart.products}
-        }
-       );
-       console.log('quitado de la lista',data);
-       //no responde por postman
-    res.status(204).json({ message: 'producto quitado' ,existingCart});
+    const productDelete = await CartController.deleteProduct(_id,pId)    
+    res.status(204).json({ message: 'producto quitado' ,productDelete});
     }catch (error) {
-        res.status(500).json({ message: 'Error al borrar producto al carrito' });
+        res.status(500).json({ message: 'Error al borrar producto del carrito' });
     }
 });
 
 router.delete('/carts/:cid', async (req,res) => {
-    //eliminar el carrito completo
+    //vaciamos carrito
     const {cid} = req.params;
     
     try {
-       const deleteCart = await CartController.delete({_id: cid});
+       const deleteCart = await CartController.deleteCart({_id: cid});
        console.log('result',deleteCart);
         res.status(204).json(`carrito borrado ${cid}`);
     } catch (error) {
@@ -95,41 +54,33 @@ router.delete('/carts/:cid', async (req,res) => {
 
 router.put('/carts/:cid', async (req,res) => {
     //actualiza products con un array
-    const cId = req.params.cid;
-    const { newProducts} = req.body;
-    let existingCart = await CartController.GetById({_id: cId});
-    console.log(newProducts)
-    if(!existingCart){
-        res.status(400).json("carrito no encontrado");
+    const _id = req.params.cid;
+    const { products: newProducts } = req.body;
+    
+    
+    try {
+        let newCart = await CartController.updateCart(_id,newProducts);
+        console.log(newCart);
+        res.status(204).json(`carrito actualizado ${newCart}`);  
+    } catch (error) {
+        res.status(400).json("error al actualizar carrito");
+        
     }
-    const newCart = await CartController.update({
-        _id: existingCart._id,},{
-       $set:{products: newProducts}
-        }
-       );
-    res.status(204).json(`carrito actualizado ${newCart}`);   
+    
 });
 
 router.put('/carts/:cid/products/:pid', async (req,res) => {
     //actualiza solo cantidad
-    const cId = req.params.cid;
+    const _id = req.params.cid;
     const pId = req.params.pid;
     const {newQuantity} = req.body;
     try {
-    let existingCart = await CartController.GetById(cId);
-    console.log('carrito',existingCart);
-    if (!existingCart) {
-        return res.status(404).json({ message: 'Carrito no encontrado' });
-    }
-    let existProductInd = existingCart.products.findIndex( (p) => p.prodId+"" === pId );
-    console.log('indice',existProductInd);
-   existingCart.products[existProductInd].quantity = newQuantity;
-    console.log('mutado',existingCart);
-    await CartController.update(cId, {
-        $set:{products: existingCart.products}
-         });
-      
-    res.status(204).json({ message: 'cantidad actualizada' ,existingCart});
+            let existingCart = await CartController.updateQuantity(_id,pId,newQuantity);
+           
+             if (!existingCart) {
+             return res.status(404).json({ message: 'Carrito no encontrado' });
+             } 
+             res.status(204).json({ message: 'cantidad actualizada' ,existingCart});
     }catch (error) {
         console.error('error al actualizar cantidad');
         res.status(500).json('error')
@@ -141,8 +92,8 @@ router.put('/carts/:cid/products/:pid', async (req,res) => {
 
 router.get('/carts/:cid', async (req,res) => {
 
-const cId = req.params.cid;
- const cartDb = await CartController.GetById({_id: cId}).populate('products.prodId');
+const _id = req.params.cid;
+ const cartDb = await CartController.getPopulate(_id);
  if(!cartDb){
     return res.status(404).json({message: 'carrito no encontrado'})
  }
@@ -151,37 +102,13 @@ const cId = req.params.cid;
  res.render('cart' , { title: 'cart',cartDb: result});
 });
 
-
+router.get('/:cid/purchase', async (req,res) =>{
+    const cartId = req.params.cid;
+    const email = req.user.email ;
+    const final = await TicketsController.Purchase(cartId,email);
+    res.status(201).json(final);
+})
 
 
 export default router;
 
-
-/*router.put('/carts/:cid/products/:pid', async (req,res) => {
-    //actualiza solo cantidad
-    const cId = req.params.cid;
-    const pId = req.params.pid;
-    const {newQuantity} = req.body;
-    try {
-    let existingCart = await CartController.GetById({_id: cId});
-    console.log('carrito',existingCart);
-    let existProductInd = existingCart.products.findIndex( (p) => p.prodId+"" === pId );
-    console.log('indice',existProductInd);
-
-    existingCart.products[existProductInd] = {prodId: existingCart.products[existProductInd].prodId, quantity: newQuantity }
-    console.log('mutado',existingCart);
-    await CartController.update({
-        _id: existingCart._id,},{
-       $set:{products: existingCart.products}
-        }
-       );
-      
-    res.status(204).json({ message: 'cantidad actualizada' ,existingCart});
-    }catch (error) {
-        console.error('error al actualizar cantidad');
-        res.status(500).json('error')
-    }
-   
-});
-
-*/
