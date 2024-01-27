@@ -2,6 +2,7 @@ import express from 'express';
 import { Router } from 'express';
 import CartController from '../../controller/carts.controller.js';
 import TicketsController from '../../services/tickets.controller.js';
+import UsersDTO from '../../dto/users.dto.js';
 
 const router = Router();
 
@@ -99,7 +100,8 @@ const _id = req.params.cid;
  }
   console.log(cartDb);
   const result = cartDb.products.map(prod =>{return { id:prod.prodId?._id, title:prod.prodId?.title, description: prod.prodId?.description, price:prod.prodId?.price, category: prod.prodId?.category, code: prod.prodId?.code, stock: prod.prodId?.stock, statusP: prod.prodId?.statusP, quantity: prod.prodId?.quantity }})
- res.render('cart' , { title: 'cart',cartDb: result});
+  const dataUserDTO = new UsersDTO(req.user);
+ res.render('cart' , { title: 'cart',cartDb: result,dataUserDTO});
 });
 
 router.get('/:cid/purchase', async (req,res) =>{

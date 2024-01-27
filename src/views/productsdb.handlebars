@@ -2,6 +2,7 @@
 
 <button id="logoutButton" onclick="click">Logout</button>
 
+
 <h1>Lista de Productos</h1>
 <div>
     {{#each payload}}
@@ -24,6 +25,10 @@
             </article>
         </div>
     {{/each}}
+        <div>
+    <a href="http://localhost:8080/api/carts/{{dataUserDTO.cart}}"><p>Carrito</p></a>
+        </div>
+</div>
 
         <div>
             <p>Paginas: {{this.totalPages}}</p>
