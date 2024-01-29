@@ -1,39 +1,47 @@
-<h1>Bienvenido {{dataUserDTO.firstName}} {{dataUserDTO.lastName}}</h1>
+<div class="welcome">
+    <h1>Bienvenido {{dataUserDTO.firstName}} {{dataUserDTO.lastName}}</h1>
 
-<button id="logoutButton" onclick="click">Logout</button>
 
+    <div>
+        <a href="http://localhost:8080/api/carts/{{dataUserDTO.cart}}">
+            <img src="/images/cart.png" alt="carrito" class="cart" width="80px" height="80px">
+        </a>
+    </div>
 
-<h1>Lista de Productos</h1>
-<div>
+    <div>
+        <h1>Lista de Productos</h1>
+    </div>
+    <button id="logoutButton" onclick="click" class="logoutButton">Logout</button>
+</div>
+<div class="listContainer">
+    
     {{#each payload}}
-        <div>
-            <article>
-            <header>
-                <p>{{this.title}}</p>
-            </header>    
-            <p>{{this.description}}</p>
-            <p>{{this.price}}</p>
-            <p>{{this.category}}</p>
-            <p>{{this.code}}</p>
-            <p>{{this.stock}}</p>
-            <p>{{this.statusP}}</p>
+        <div class="productContainer">
+            <article class="productDetails">
+                <header class="productTitle">
+                    <p>{{this.title}}</p>
+                </header>    
+                <p>Descripcion: {{this.description}}</p>
+                <p>Precio: ${{this.price}}</p>
+                <p>Categoria: {{this.category}}</p>
+                <p>Codigo: {{this.code}}</p>
+                <p>Stock: {{this.stock}}</p>
+                <p>{{this.statusP}}</p>
 
             <form id="addCart" data-id="{{this._id}}" >
-                <input type="number" id="quantityIn{{this._id}}" placeholder="0" min="1">
-            <button type="submit">Agregar</button>
+                <input type="number" id="quantityIn{{this._id}}" placeholder="0" min="1" class="inputs">
+            <button type="submit" class="submitButton">Agregar</button>
             </form>
             </article>
         </div>
     {{/each}}
-        <div>
-    <a href="http://localhost:8080/api/carts/{{dataUserDTO.cart}}"><p>Carrito</p></a>
-        </div>
+    
 </div>
 
-        <div>
+        <div class="productController">
+            <a href={{this.prevLink}}> Anterior </a>
             <p>Paginas: {{this.totalPages}}</p>
             <p>Pagina Actual: {{this.page}}</p>
-            <a href={{this.prevLink}}> Anterior </a>
             <a href={{this.nextLink}}> Siguiente </a>
         </div>
 </div>

@@ -8,138 +8,104 @@ import { v4 as uuidv4 } from 'uuid';
 const ticketsRepository = new TicketsRepository(TicketsDao);
 
 export default class TicketsController {
-    static async Purchase(cartId, email) {
+    static async compare(cartId) {
         try {
             const cart = await CartController.getPopulate(cartId);
             console.log('cart', cart);
             const productList = await ProductController.get();
 
-            const stockOperations = cart.products.map(async (productInCart) => {
+            return Promise.all(cart.products.map(async (productInCart) => {
                 const productInList = productList.find(p => p._id.toString() === productInCart.prodId._id.toString());
 
                 if (!productInList) {
-                    console.error(`Product with prodId ${productInCart.prodId} not found in the product list.`);
-                   
+                    console.error(`Product with prodId ${productInCart.prodId} not found in the product `)
                 }
 
                 if (productInCart.quantity < productInList.stock) {
-                    const newStock = productInList.stock - productInCart.quantity;
-                    const data = {
-                        title: productInList.title,
-                        description: productInList.description,
-                        price: productInList.price,
-                        category: productInList.category,
-                        code: productInList.code,
-                        stock: newStock,
-                        StatusP: productInList.statusP,
-                        thumbnail: productInList.thumbnail
-                    };
-                    const _id = productInList._id.toString();
                     return {
-                        price: productInList.price * productInCart.quantity,
-                        updateProduct: ProductController.findAndUpdate(_id, data)
+                        subTotal: productInList.price * productInCart.quantity,
+                        quantity: productInCart.quantity,
+                        data: productInCart
                     };
                 } else {
                     return {
-                        prodId: productInCart.prodId,
+                        prodId: productInCart.prodId._id.toString(),
                         quantity: productInCart.quantity
                     };
                 }
-            });
-           
-            const stockResults = await Promise.all(stockOperations);
-            console.log('stocksResults',stockResults);
+            }));
+        } catch (error) {
+            console.error('Error:', error);
+            
+        }
+    }
+    static async succesStock(cartId) {
+        const compareResults = await TicketsController.compare(cartId);
 
-            const okStock = stockResults
-                .filter(result => result && result.price)
-                .map(result => result.price);
-            console.log('okstock',{okStock})    
-            const notStock = stockResults
-                .filter(result => result && !result.price)
-                .map(result => ({ prodId: result.prodId, quantity: result.quantity }));
-                console.log('notstock',{notStock});
-            // total de compra
-            const total = okStock.reduce((acc, val) => acc + val, 0);
+        const productsForRender = await Promise.all(compareResults.filter(elem => elem && elem.data));
+        console.log('data', productsForRender);
+
+        const notStock = compareResults
+            .filter(result => result && !result.subTotal)
+            .map(result => ({ prodId: result.prodId, quantity: result.quantity }));
+        console.log('notstock', { notStock });
+
+        const dataRender = { yes: { productsForRender }, no: { notStock } };
+        return dataRender;
+    }
+
+    static async Purchase(cartId, email) {
+        try {
+            const result = await TicketsController.succesStock(cartId);
+            console.log('result',{result})
+            const stockResults = await Promise.all(result.yes.productsForRender.map(async (prod) => {
+                const _id = prod.data.prodId._id
+                const productInList = await ProductController.getById(_id);
+
+                const newStock = productInList.stock - prod.quantity;
+
+                const data = {
+                    title: productInList.title,
+                    description: productInList.description,
+                    price: productInList.price,
+                    category: productInList.category,
+                    code: productInList.code,
+                    stock: newStock,
+                    StatusP: productInList.statusP,
+                    thumbnail: productInList.thumbnail
+                };
+
+               
+
+                return {
+                    price: prod.subTotal,
+                    updateProduct: ProductController.findAndUpdate(_id, data),
+                };
+            }));
+
+           // console.log('stockRes',{stockResults});
+            const total = stockResults.reduce((acc, val) => acc + val.price, 0);
+            console.log('total',total);
             const purchaseData = {
                 code: uuidv4(),
                 amount: total,
-                purchaser: email
+                purchaser: email,
             };
 
-           
+            await CartController.updateCart({ _id: cartId }, result.no.notStock);
 
-            await CartController.updateCart({ _id: cartId }, notStock);
             return await ticketsRepository.create(purchaseData);
         } catch (error) {
             console.error('Error:', error);
         }
-    }
-}
-
-/*
-const ticketsRepository = new TicketsRepository(TicketsDao);
-
-export default class TicketsController{
-
-    static async Purchase(cartId,email){
-        try {
-        const cart = await CartController.getPopulate(cartId);
-        console.log('cart', cart);
-        const productList = await ProductController.get();
-     
-        const okStock = [];
-        const notStock = [];
-
-        for (const productInCart of cart.products) {
-            const productInList = productList.find(p => p._id.toString() === productInCart.prodId._id.toString());
-
-            if (!productInList) {
-               
-                console.error(`Product with prodId ${productInCart.prodId} not found in the product list.`);
-                continue;
-            }
-
-            if (productInCart.quantity < productInList.stock) {
-                
-                const newStock = productInList.stock - productInCart.quantity;
-                const data = {title: productInList.title ,
-                              description:productInList.description ,
-                              price: productInList.price ,
-                              category: productInList.category ,
-                              code: productInList.code ,
-                              stock: newStock,
-                              StatusP: productInList.statusP ,
-                              thumbnail: productInList.thumbnail   
-                            }
-                const _id = productInList._id.toString();     
-             
-                okStock.push(productInList.price*productInCart.quantity);     
-                await ProductController.findAndUpdate(_id, data)
-            } else {
-
-                notStock.push({
-                   prodId: productInCart.prodId,
-                   quantity: productInCart.quantity});
-               
-            }
         }
-        
-        //multiplicar por cantidad
-        const total = okStock.reduce((acc,val) => acc + val,0);
-        const purchaseData = {
-            code: uuidv4(),
-            amount : total,
-            purchaser: email
-        }
+    }
 
-        console.log('okStock', okStock);
-        console.log('notStock', notStock);
-      
-        await CartController.updateCart({_id: cartId},notStock)
-        return await ticketsRepository.create(purchaseData);
-    } catch (error) {
-        console.error('Error:', error);
-    }
-    }
-}
-*/
+
+
+
+
+
+
+
+

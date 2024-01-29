@@ -1,12 +1,12 @@
-<article>
-<form id="formLogin" action="/sessions/login" method="post">
+<article class="loginContainer">
+<form id="formLogin" action="/sessions/login" method="post" class="loginForm">
 <header>
-    <h1>Inicio de Sesion</h1>
+    <h1 class="loginTitle">Inicio de Sesion</h1>
 </header>
-<input id="emailInp" type="email" name="email" placeholder="correo" required>
-<input id="passwordInp" type="password" name="password" placeholder="pass" required>
+<input id="emailInp" type="email" name="email" placeholder="correo" class="inputs" required>
+<input id="passwordInp" type="password" name="password" placeholder="pass" class="inputs" required>
 <footer>
-    <input type="submit" value="Entrar">
+    <input type="submit" value="Entrar" class="submitButton">
 </footer>
 <a href="/sessions/github" role="button"> Entrar con GitHub</a>
 <a href="/register">Registrate</a>

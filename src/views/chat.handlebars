@@ -1,17 +1,19 @@
+<div class="loginContainer">
 <h1>Chat</h1>
 
 <article>
-    <form id="chat-form">
-        <input id="user-input" type="text" placeholder="e-mail">
-        <input id="input-message" type="text" placeholder="escribe tu mensaje">
-        <input type="submit" value="Enviar">
+    <form id="chat-form" class="loginForm">
+        <input id="user-input" type="text" placeholder="e-mail" class="inputs">
+        <input id="input-message" type="text" placeholder="escribe tu mensaje" class="inputs">
+        <input type="submit" value="Enviar" class="submitButton">
     </form>
 </article>
 
 <article>
-    <div id="log-messages">
+    <div id="log-messages" class="logMessages">
 
     </div>
 </article>
+</div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/chat.js"></script>

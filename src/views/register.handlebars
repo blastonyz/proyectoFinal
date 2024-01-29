@@ -1,15 +1,15 @@
-<article>
-<form id="registerForm" action="/sessions/register" method="post">
+<article class="loginContainer">
+<form id="registerForm" action="/sessions/register" method="post" class="loginForm">
 <header>
-    <h1>Registro</h1>
+    <h1 class="loginTitle">Registro</h1>
 </header>
-<input id="first_nameInp" type="text" name="first_name" placeholder="Nombre" required>
-<input id="last_nameInp" type="text" name="last_name" placeholder="Apellido" required>
-<input id="emailInp" type="email" name="email" placeholder="correo" required>
-<input id="ageInp" type="number" name="age" placeholder="Edad" required>
-<input id="passwordInp" type="password" name="password" placeholder="pass" required>
+<input id="first_nameInp" type="text" name="first_name" placeholder="Nombre" class="inputs" required>
+<input id="last_nameInp" type="text" name="last_name" placeholder="Apellido" class="inputs" required>
+<input id="emailInp" type="email" name="email" placeholder="correo" class="inputs" required>
+<input id="ageInp" type="number" name="age" placeholder="Edad" class="inputs" required>
+<input id="passwordInp" type="password" name="password" placeholder="pass" class="inputs" required>
 <footer>
-    <input type="submit" value="Registrarse">
+    <input type="submit" value="Registrarse" class="submitButton">
 </footer>
 <a href="/login">Ingreso</a>
 </form>

@@ -3,7 +3,8 @@ import { Router } from 'express';
 import CartController from '../../controller/carts.controller.js';
 import TicketsController from '../../services/tickets.controller.js';
 import UsersDTO from '../../dto/users.dto.js';
-
+import {authRolesMiddleware } from '../../utils.js';
+import CartDTO from '../../dto/cart.dto.js';
 const router = Router();
 
 
@@ -91,7 +92,58 @@ router.put('/carts/:cid/products/:pid', async (req,res) => {
 
 
 
-router.get('/carts/:cid', async (req,res) => {
+router.get('/carts/:cid', authRolesMiddleware(['user']), async (req, res) => {
+    const _id = req.params.cid;
+    const succesResult = await TicketsController.succesStock(_id);
+
+    const cartDTO = new CartDTO(succesResult);
+
+    const dataUserDTO = new UsersDTO(req.user);
+    const notStockData = await cartDTO.notStock; 
+    console.log('not stock obj', notStockData);
+    res.render('cart', {
+        title: 'cart',
+        cartDb: cartDTO.productsForRender,
+        notStock: notStockData,
+        dataUserDTO
+    });
+});
+
+router.get('/:cid/purchase', async (req, res) => {
+    const cartId = req.params.cid;
+    const email = req.user.email;
+
+    try {
+         
+        const succesResult = await TicketsController.succesStock(cartId);
+    
+        const purchase = await TicketsController.Purchase(cartId, email);
+    
+        const cartDTO = new CartDTO(succesResult);
+    
+    
+        const notStock = await cartDTO.notStock;
+        console.log({purchase});
+
+        const purchaseRenderData= {code: purchase.code,
+                                   amount: purchase.amount,
+                                   purchaser: purchase.purchaser 
+        }
+        res.render('purchase', {
+            title: 'Compra', 
+            purchase:purchaseRenderData ,
+            notStock
+        });
+    } catch (error) {
+        console.error('Error al procesar la compra:', error);
+        res.status(500).json({ message: 'Error en la compra' });
+    }
+});
+
+export default router;
+
+/*
+router.get('/carts/:cid',authRolesMiddleware(['user']) ,async (req,res) => {
 
 const _id = req.params.cid;
  const cartDb = await CartController.getPopulate(_id);
@@ -99,18 +151,7 @@ const _id = req.params.cid;
     return res.status(404).json({message: 'carrito no encontrado'})
  }
   console.log(cartDb);
-  const result = cartDb.products.map(prod =>{return { id:prod.prodId?._id, title:prod.prodId?.title, description: prod.prodId?.description, price:prod.prodId?.price, category: prod.prodId?.category, code: prod.prodId?.code, stock: prod.prodId?.stock, statusP: prod.prodId?.statusP, quantity: prod.prodId?.quantity }})
+  const result = cartDb.products.map(prod =>{return { id:prod.prodId?._id, title:prod.prodId?.title, description: prod.prodId?.description, price:prod.prodId?.price, category: prod.prodId?.category, code: prod.prodId?.code, stock: prod.prodId?.stock, statusP: prod.prodId?.statusP, quantity: prod.quantity }})
   const dataUserDTO = new UsersDTO(req.user);
  res.render('cart' , { title: 'cart',cartDb: result,dataUserDTO});
-});
-
-router.get('/:cid/purchase', async (req,res) =>{
-    const cartId = req.params.cid;
-    const email = req.user.email ;
-    const final = await TicketsController.Purchase(cartId,email);
-    res.status(201).json(final);
-})
-
-
-export default router;
-
+});*/

@@ -68,10 +68,10 @@ app.use('/', sessionRender, sessionRouter);
 app.use('/api',indexRouter);
 
 //vista de carts
-app.use('/api',authRolesMiddleware(['user']),cartRouter);
+app.use('/api',cartRouter);
 
 //chat
-app.use('/api',authRolesMiddleware(['user']),chatRouter);
+app.use('/api',chatRouter);
 
 //realtime, websocket y mongoDB
 app.use('/set',viewsRoutes);

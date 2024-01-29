@@ -1,25 +1,23 @@
 <h1>Lista de Productos del carrito</h1>
 <div class="listContainerCart">
-    {{#each cartDb}}
+    
       <div class="productContainerCart">
         
          <article class="productDetailsCart">
 
             <header class="productTitle">
-                <p>{{this.title}}</p>
+                <p>Detalles de tu Compra</p>
             </header>    
-              <p>Descripcion: {{this.description}}</p>
-              <p>Precio: ${{this.price}}</p>
-              <p>Categoria:  {{this.category}}</p>
-              <p>Stock:  {{this.stock}} unidades</p>
-              <p>Cantidad: {{this.quantity}}</p>
-              <p>SubTotal: {{this.subTotal}}</p>
+              <p>Codigo: {{{purchase.code}}}</p>
+              <p>Total:  {{{purchase.amount}}}</p>
+              <p>Usuario:  {{{purchase.purchaser}}}</p>
+             
          </article>
       </div>
-    {{/each}}
-    <a href="http://localhost:8080/api/{{dataUserDTO.cart}}/purchase" >Comprar</a>
+ 
    
-      <h3 class="subTitle">Productos sin Stock Suficiente</h3>
+   
+      <h3 class="subTitle">Compras Pendientes</h3>
      {{#each notStock}}
       <div class="productContainerCart">
         
@@ -37,5 +35,8 @@
          </article>
       </div>
     {{/each}}
-</div>
+    
+      <h3 class="subTitle">Te Notificaremos cuando este disponible!</h3>
 
+      <a href="http://localhost:8080/api/productsdb" >Lista de Productos</a>
+</div>

@@ -71,12 +71,15 @@ passport.use('github', new GithubStrategy(githubOpts, async (accesstoken, refres
     if(user){
         return done(null, user);
     }
+    const newCart = await CartDao.create({products:[]});
+    const cartID = newCart._id.toString();
     user = {
         first_name: profile._json.name,
         last_name:'' ,
         email,
         age: 20,
-        password: ''
+        password: '',
+        cart: cartID
     }
     const newUser = await UsersController.createUser(user);
     done(null, newUser);

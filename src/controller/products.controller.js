@@ -29,6 +29,9 @@ export default class ProductController {
     }
     static findAndUpdate(sid,data){
         return productsRepository.findAndUpdate({_id: sid},data);
-     }
+    }
+    static getPopulate(sid){
+        return productsRepository.getPopulate(sid);
+    }
 }
 

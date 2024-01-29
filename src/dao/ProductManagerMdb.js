@@ -34,4 +34,8 @@ export default class ProductManagerMdb extends ProductsRepository{
         console.log(`Producto del id actualizado: ${sid}`);
         return updatedProduct;
     }
+    static async getPopulate(sid) {
+        const populated = await ProductModel.findById(sid).populate('Product'); 
+        return populated;
+    }
 }

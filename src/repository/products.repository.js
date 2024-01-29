@@ -28,4 +28,7 @@ export default class ProductsRepository{
     async findAndUpdate(sid,data){
        return this.dao.findAndUpdate(sid,data);
     }
+    async getPopulate(sid){
+        return this.dao.getPopulate(sid);
+    }
 }
