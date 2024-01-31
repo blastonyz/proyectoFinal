@@ -16,7 +16,7 @@ router.post('/sessions/login',passport.authenticate('login', {failureRedirect: '
 });
 
 router.post('/sessions/register',passport.authenticate('register', {failureRedirect: '/register'}), async (req,res) => { 
-    res.redirect('/login')
+    res.redirect('/login');
 });
 
 router.get('/sessions/github',passport.authenticate('github' , {scope: ['user:email']}));
@@ -45,22 +45,3 @@ router.get('/sessions/logout', (req,res) => {
 })
 export default router;  
 
-/*router.post('/sessions/login',passport.authenticate('login', {failureRedirect: '/login'}), async (req,res) => {
-    if(!req.user){
-        
-        return res.redirect('/login')
-    }
-    res.status(302).redirect('/api/productsdb');
-});
-
-router.post('/sessions/register',passport.authenticate('register', {failureRedirect: '/register'}), async (req,res) => { 
-    res.redirect('/login')
-});
-
-router.get('/sessions/github',passport.authenticate('github' , {scope: ['user:email']}));
-
-router.get('/sessions/github/callback', passport.authenticate('github', {failureredirect: '/login'}), (req,res) =>{
-    console.log(req.user);
-    res.redirect('/api/productsdb');
-});
-*/

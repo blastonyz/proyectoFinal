@@ -4,10 +4,12 @@ import sessions from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
 
-import { __dirname, authRolesMiddleware } from './utils.js';
+import { __dirname } from './utils.js';
+import { generateProduct } from './utils/utils.mocking.js';
 import path from 'path';
 import {init as initPassport} from './passport/passport.config.js';
 import config from './config/config.js';
+import { errorHandlerMiddleware } from './utils/error.handler.middleware.js';
 
 import cartRouter from "./routes/views/cartRoutes.js"
 import productRouter from "./routes/productRoute.js";
@@ -76,13 +78,17 @@ app.use('/api',chatRouter);
 //realtime, websocket y mongoDB
 app.use('/set',viewsRoutes);
 
-
-app.use((error,req,res,next) => {
-    const message = `error desconocido: ${error.message}`;
-    console.error(message);
-    res.status(500).json({message});
-    next();
+//mocking
+app.get('/mockingporducts',(req,res)=>{
+    const productMocks = [];
+    for (let index = 1; index < 100; index++) {
+        productMocks.push(generateProduct());
+        
+    }
+ res.status(200).json(productMocks);   
 })
+
+app.use(errorHandlerMiddleware)
 
 
  export default app;

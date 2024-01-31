@@ -54,7 +54,7 @@
    align-items: center;
    border-radius: 15px; 
    padding: 15px;
-   
+   border: 5px solid black;
 }
 
  .productDetails p{
@@ -140,6 +140,7 @@ margin-top: 15px;
 margin-right: 40%;
 box-sizing: border-box;
 align-items: flex-start;
+border: 5px solid black;
 }
 
 .subTitle{

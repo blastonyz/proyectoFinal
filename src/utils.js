@@ -37,3 +37,4 @@ export const authRolesMiddleware = (userRole) => (req, res, next) => {
         
         return res.status(403).render('error', {messageError: 'Acceso Denegado'});
 };
+

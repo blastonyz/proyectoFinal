@@ -4,7 +4,9 @@ import { Strategy as GithubStrategy } from 'passport-github2';
 import UsersController from '../controller/users.controller.js';
 import CartDao from '../dao/carts.dao.js';
 import { createHash, isValidPassword } from '../utils.js';
-
+import { CustomErrors } from '../utils/custom.errors.js';
+import { generatorLoginError, generatorUserError, generatorRegisterError } from '../utils/causeMessage.errors.js';
+import listErrors from '../utils/list.errors.js';
 
 export const init = () => {
 const registerOpts = {
@@ -22,12 +24,47 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
         } 
     }= req;
     if(!first_name || !last_name || !email ||  !age || !password){
-        return done(new Error( 'Todos los campos son requeridos'));
+      try {
+        throw CustomErrors.create({
+                name:'invalid users data',
+                cause: generatorUserError({ 
+                    first_name,
+                    last_name,
+                    age,
+                    email,}),     
+               
+               message: 'Error al intentar registrarse',
+               code: listErrors.BAD_REQUEST_ERROR,  
+                  
+                })
+          
+           
+      } catch (error) {
+        return done(error);
+      }  
+     
     }
     const user = await UsersController.findByEmail({email});
     if (user){
-        return done(new Error(`Ya existe un usuario con ${email} registrado`))
+        try {
+            throw CustomErrors.create({
+                name:'email allready register',
+                cause: generatorRegisterError({ 
+                    first_name,
+                    last_name,
+                    age,
+                    email,}),     
+               
+               message: 'Usuario ya registrado',
+               code: listErrors.BAD_REQUEST_ERROR,     
+                });
+
+        } catch (error) {
+            return done(error);
+        }
+        
     }
+
     const newCart = await CartDao.create({products:[]});
     const cartID = newCart._id.toString();
     console.log('cartID',cartID);
@@ -47,7 +84,21 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
 passport.use('login', new LocalStrategy({usernameField: 'email'},async (email, password, done) => {
         const user = await UsersController.findByEmail({email});
         if(!user){
-            return done(new Error('Correor o contraseña invalidos'))
+            try {
+            throw CustomErrors.create({
+                    name:'invalid users data',
+                    cause: generatorLoginError({ 
+                        email,
+                        password
+                    }),     
+                   
+                   message: 'Error al intentar ingresar',
+                   code: listErrors.BAD_REQUEST_ERROR,     
+                    })
+            } catch (error) {
+                return done(error)
+            }
+            
         }
         const isNotValidPassword = !isValidPassword(password,user);
         if(isNotValidPassword){
