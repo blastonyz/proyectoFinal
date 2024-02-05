@@ -6,8 +6,8 @@ dotenv.config();
 const program = new Command();
 
 program
-        .option('-d', 'FLag para Debug', false)
-        .option('--mode <mode>', 'Modo de ejecucion: dev | prod', 'prod');
+        .option('-d', 'Flag para Debug', false)
+        .option('--mode <mode>', 'Modo de ejecucion: dev | production', 'production');
 
 program.parse();
 

@@ -2,6 +2,7 @@ import {Router} from 'express';
 import ProductController from '../../controller/products.controller.js';
 import UsersDTO from '../../dto/users.dto.js';
 import EmailServices from '../../services/mail.services.js';
+import { logger } from '../../utils/logger.js';
 
 const router = Router();
 
@@ -37,7 +38,7 @@ router.get('/productsdb', async(req,res) => {
    }
    
    const dataUserDTO = new UsersDTO(req.user);
-   console.log(dataUserDTO)
+   logger.info('datos de usuario',dataUserDTO)
  
    const data = buildResponse({...products,sort,search});
    res.render('productsdb' ,{...data,title: 'integracion de DB',dataUserDTO});

@@ -5,14 +5,17 @@ import sessionRouter from  '../api/session.router.js';
 const router= Router();
 
 router.get('/login', (req,res) =>{
-    res.render('login', {title:"Inicio de Sesion"})
+     const error = req.query.error; 
+    res.render('login', {title:"Inicio de Sesion",error})
 });
 
 router.get('/register', (req,res) =>{
-    res.render('register', {title:"Registro"})
+     const error = req.query.error; 
+    res.render('register', {title:"Registro",error})
 });
 
 router.get('/recovery-password', (req,res) =>{
-    res.render('recovery-pass', {title:"Recuperar Contraseña"})
+     const error = req.query.error; 
+    res.render('recovery-pass', {title:"Recuperar Contraseña",error})
 });
 export default router

@@ -10,7 +10,7 @@ export const errorHandlerMiddleware = (error, req , res ,next) => {
         case listErrors.DATA_BASE_ERROR:
         case listErrors.ROUTING_ERROR:
         default:
-            res.status(500).json({message: message.error})                
+            res.status(500).json({message: error.message})                
     }
     next();
 }

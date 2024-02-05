@@ -7,6 +7,7 @@ import { createHash, isValidPassword } from '../utils.js';
 import { CustomErrors } from '../utils/custom.errors.js';
 import { generatorLoginError, generatorUserError, generatorRegisterError } from '../utils/causeMessage.errors.js';
 import listErrors from '../utils/list.errors.js';
+import { logger } from '../utils/logger.js';
 
 export const init = () => {
 const registerOpts = {
@@ -25,6 +26,7 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
     }= req;
     if(!first_name || !last_name || !email ||  !age || !password){
       try {
+        logger.warning('Campos Incompletos');  
         throw CustomErrors.create({
                 name:'invalid users data',
                 cause: generatorUserError({ 
@@ -38,7 +40,7 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
                   
                 })
           
-           
+         
       } catch (error) {
         return done(error);
       }  
@@ -67,7 +69,7 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
 
     const newCart = await CartDao.create({products:[]});
     const cartID = newCart._id.toString();
-    console.log('cartID',cartID);
+    logger.info('cartID',cartID);
     const newUser = await UsersController.createUser({
         first_name,
         last_name,
@@ -77,7 +79,7 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
         role:email === 'adminCoder@coder.com' && password ==='adminCod3e123'?'admin':'user',
         cart: cartID
     });
-    console.log('newUser',newUser);
+   logger.info('newUser',newUser);
     done(null,newUser);
 }))
 
@@ -85,6 +87,7 @@ passport.use('login', new LocalStrategy({usernameField: 'email'},async (email, p
         const user = await UsersController.findByEmail({email});
         if(!user){
             try {
+            req.logger.warning('Usuario no registrado');    
             throw CustomErrors.create({
                     name:'invalid users data',
                     cause: generatorLoginError({ 
@@ -102,9 +105,9 @@ passport.use('login', new LocalStrategy({usernameField: 'email'},async (email, p
         }
         const isNotValidPassword = !isValidPassword(password,user);
         if(isNotValidPassword){
-            return done(new Error('Correo o Contraseña invalidos'));
+            return done(new Error(' aca Correo o Contraseña invalidos'));
         }
-        console.log('user', user);
+        logger.info('user', user);
         done(null, user);
 }));
 
@@ -118,7 +121,7 @@ const githubOpts = {
 passport.use('github', new GithubStrategy(githubOpts, async (accesstoken, refreshToken, profile, done) => {
     const email = profile._json.email;
     let user = await UsersController.findByEmail({ email });
-    console.log(user);
+    logger.info('usuario github',user);
     if(user){
         return done(null, user);
     }
