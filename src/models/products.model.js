@@ -10,6 +10,7 @@ const ProductSchema = new mongoose.Schema({
     stock: {type: Number, required: true},
     statusP: {type: Boolean, required: true},
     thumbnail: {type: Array},
+    owner:{type: mongoose.Schema.Types.ObjectId, ref: 'Session'}
 },
 {timestamps: true}
 )

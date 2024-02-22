@@ -19,6 +19,7 @@ export default {
     port: process.env.PORT || 3000,
     mongodbUri:process.env.MONGODB_URI,
     session_secret: process.env.SESSION_SECRET,
+    jwt_secret: process.env.JWT_SECRET,
     mail: {
         emailServices: process.env.EMAIL_SERVICES || 'gmail',
         emailPort: process.env.EMAIL_PORT || 587,

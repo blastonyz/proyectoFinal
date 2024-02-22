@@ -18,7 +18,8 @@ formMessageAdd.addEventListener('submit', (even) =>{
     const stock = inputStockAdd.value;
     const inputStatusAdd = document.getElementById('statusAdd');
     const statusP = inputStatusAdd.value;
-
+    const inputOwnerAdd = document.getElementById('ownerAdd');
+    const owner = inputOwnerAdd.value;
 
     const newProduct = {
                 title,
@@ -28,6 +29,7 @@ formMessageAdd.addEventListener('submit', (even) =>{
                 code,
                 stock,
                 statusP,
+                owner 
     }
     socket.emit('product-add', newProduct);
 
@@ -98,7 +100,9 @@ formMessageDelete.addEventListener('submit', (event) =>{
     event.preventDefault();
     const IdDelete = document.getElementById('deleteId');
     const deleteId = IdDelete.value;
-    socket.emit('products-delete', deleteId);
+    const idUser = document.getElementById('ownerId').value;
+    const deleteData ={deleteId,idUser};
+    socket.emit('products-delete', deleteData);
 });
 
 //escucha y render lista completa

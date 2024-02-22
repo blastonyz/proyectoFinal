@@ -1,12 +1,11 @@
 <article class="loginContainer">
-    <form action="/sessions/recovery-password?token={{{token}}}" method="post" class="loginForm">
+    <form action="/sessions/recovery-link" method="post" class="loginForm">
     <header>
         <h1 class="loginTitle">recuperar Contraseña</h1>
     </header>
     <input type="email" name="email" placeholder="e-mail" class="inputs" >
-    <input type="password" name="password" placeholder="Nueva Constraseña"  class="inputs" required>
     <footer>
-        <input type="submit" value="Restablecer" class="submitButton">
+        <input type="submit" value="Enviar" class="submitButton">
     </footer>
     <a href="/login">Iniciar Sesion</a>
     </form>

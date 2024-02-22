@@ -17,6 +17,6 @@ export default class UsersController {
     }
 
     static updateUser(email,user){
-        return usersRepository.updateOne(email,user);
+        return usersRepository.updateUser(email,user);
     }
 }

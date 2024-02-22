@@ -20,7 +20,7 @@ import indexRouter from './routes/views/index.router.js';
 import chatRouter from './routes/api/chat.router.js';
 import sessionRouter from './routes/api/session.router.js'
 import sessionRender from './routes/views/sessions.render.js'
-
+import usersRouter from './routes/api/role.router.js';
 
 
 const SESSION_SECRET = config.session_secret;
@@ -74,7 +74,7 @@ app.get('/', (req,res) =>{
 app.use('/', sessionRender, sessionRouter);
 
 //paginacion
-app.use('/api',indexRouter);
+app.use('/api',indexRouter, usersRouter);
 
 //vista de carts
 app.use('/api',cartRouter);

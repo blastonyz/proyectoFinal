@@ -1,11 +1,8 @@
 import path from 'path';
 import url from 'url';
 import bcrypt, { genSaltSync } from 'bcrypt';
-import passport from 'passport';
-import { title } from 'process';
-import { lutimes } from 'fs';
-//import { createHash } from 'crypto';
-
+import JWT from 'jsonwebtoken';
+import config from './config/config.js';
 
 const __filename = url.fileURLToPath(import.meta.url);
 export const __dirname = path.dirname(__filename);
@@ -38,3 +35,20 @@ export const authRolesMiddleware = (userRole) => (req, res, next) => {
         return res.status(403).render('error', {messageError: 'Acceso Denegado'});
 };
 
+export const generateToken = () => {
+    const secret = config.jwt_secret;
+    return JWT.sign({},secret , {expiresIn: '1h'})
+};
+
+export const verifyToken = (token) => {
+    const secret = config.jwt_secret;
+    return new Promise((resolve,reject) =>{
+        JWT.verify(token, secret, (error)=> {
+            if(error){
+                return reject(error);
+            }
+            resolve(token);
+        })
+    })
+    
+}

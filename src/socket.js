@@ -1,6 +1,7 @@
 import {Server} from 'socket.io';
-import ProductManager from './dao/ProductManagerMdb.js'
 import MessageModel from './models/message.model.js';
+import ProductController from './controller/products.controller.js';
+import UsersController from './controller/users.controller.js';
 
 export let socketServer;
 
@@ -13,7 +14,7 @@ export const init = (httpServer) => {
 
     socketServer.on('connection', async (socketClient) => {
         
-        let productList = await ProductManager.get();
+        let productList = await ProductController.get();
 
         console.log(`Nuevo cliente conectado ${socketClient.id}`);
         //envio lista completa
@@ -22,8 +23,8 @@ export const init = (httpServer) => {
         socketClient.on('product-add',async (newProduct) =>{
             try {
                 console.log(`CLiente envio un mensaje `);
-                await ProductManager.create(newProduct);
-                let productList = await ProductManager.get();
+                await ProductController.create(newProduct);
+                let productList = await ProductController.get();
                 console.log("prodcuto agregado")
                 emit('List', productList, console.log("nueva lista"));
             } catch (error) {
@@ -36,8 +37,8 @@ export const init = (httpServer) => {
             console.log(`CLiente envio un mensaje:`);
             try {
                 console.log(`CLiente envio un mensaje `);
-                await ProductManager.updateById(updateProduct.id,updateProduct);
-                let productList = await ProductManager.get();
+                await ProductController.updateById(updateProduct.id,updateProduct);
+                let productList = await ProductController.get();
                 emit('List', productList, console.log("nueva lista"));
             } catch (error) {
                 console.error('error al actualizar producto',error)
@@ -47,7 +48,7 @@ export const init = (httpServer) => {
         socketClient.on('productsFind', async (findId) => {
             console.log(`Cliente envió un mensaje: ${findId}`);
             try {
-                const prodFind = await ProductManager.getById(findId);
+                const prodFind = await ProductController.getById(findId);
                 if (prodFind) {
                     emit('find', prodFind);
                 } else {
@@ -57,21 +58,31 @@ export const init = (httpServer) => {
                 console.error('Error al buscar producto', error);
             }
         });
-
-        socketClient.on('products-delete',async (deleteId) =>{
-            console.log(`CLiente envio un mensaje: ${deleteId}`);
-           
+    socketClient.on('products-delete',async (deleteData) =>{
+            console.log(`CLiente envio un mensaje: ${deleteData}`);
+            
+            const product = await ProductController.getById(deleteData.deleteId);
+            const user = await UsersController.findById(deleteData.idUser);
+            console.log('user', user);
+            console.log('owner',product.owner); 
+            const plainOwner = product.owner.toString();
+            console.log('iduser', deleteData.idUser);
             try {
-                
-                await ProductManager.deleteById(deleteId);
+                if(user.role !== 'admin' && plainOwner !== deleteData.idUser){
+                    console.error("producto solo puede ser borrado por creador");
+                    return;
+                }
+                await ProductController.deleteById(deleteData.deleteId);
                 
             } catch (error) {
-                console.error('error al borrar producto',error)
+                console.error('error al borrar producto',error);
+                
             }
             
-            let productList = await ProductManager.get();
+            let productList = await ProductController.get();
             emit('List', productList, console.log("nueva lista"));
         });
+    
         //chat
         socketClient.on('clientMessage', async(message)=>{
             console.log("message", message);

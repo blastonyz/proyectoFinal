@@ -25,7 +25,7 @@ export default class ProductController {
        return productsRepository.updateById({_id: sid}, {$set: data });
     }
     static deleteById(sid){
-        return productsRepository.deleteOne({_id: sid});
+        return productsRepository.deleteById({_id: sid});
     }
     static findAndUpdate(sid,data){
         return productsRepository.findAndUpdate({_id: sid},data);

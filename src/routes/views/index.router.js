@@ -1,14 +1,16 @@
 import {Router} from 'express';
 import ProductController from '../../controller/products.controller.js';
 import UsersDTO from '../../dto/users.dto.js';
-import EmailServices from '../../services/mail.services.js';
 import { logger } from '../../utils/logger.js';
 
 const router = Router();
 
 
 router.get('/productsdb', async(req,res) => {
-  
+   if(!req.user){
+      req.logger.warning('Usuario sin autenticar');
+      return res.redirect('/login')
+  }
    const {limit = 10, page = 1, sort, search} = req.query;
    const criterials = {};
    const options = {limit,page};
@@ -43,16 +45,6 @@ router.get('/productsdb', async(req,res) => {
    const data = buildResponse({...products,sort,search});
    res.render('productsdb' ,{...data,title: 'integracion de DB',dataUserDTO});
    
-})
-
-router.get('/mail', async (req,res) =>{
-   const emailService = EmailServices.getInstance();
-   const result = await emailService.sendEmail(
-      'blastonyzamora@gmail.com',
-      'Hola desde la app',
-      '<h1>Hola desde el mail service</h1>'
-   );
-   res.status(200).json(result);
 })
 
 export default router;

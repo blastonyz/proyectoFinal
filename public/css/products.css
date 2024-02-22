@@ -47,7 +47,7 @@
 
 .productContainer{
    margin: auto; 
-   background-color: rgba(231, 209, 40, 0.7);
+   background-color: rgba(240, 200, 60, 0.834);
    width: calc(25%);
    height:auto;
    justify-content:space-around;
@@ -156,4 +156,8 @@ border: 5px solid black;
     color: rgb(77, 6, 63);
     font-size: larger;
     text-align: center;
+}
+
+h3{
+    color:aliceblue;
 }

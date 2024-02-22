@@ -1,4 +1,4 @@
-<div>
+<div class="loginContainer">
 <h1>Edicion de Lista de Productos</h1>
 
 <h3>Agregar</h3>
@@ -10,6 +10,7 @@
     <input type="text" id="codeAdd"  placeholder="code" required>
     <input type="text" id="stockAdd"  placeholder="stock" required>
     <input type="text" id="statusAdd"  placeholder="statusP" required>
+    <input type="text" id="ownerAdd" value="{{idUser}}" style="display: none;">
     <input type="submit">
 </form>
 
@@ -22,6 +23,7 @@
 <h3>Borrar por Id</h3>
 <form id="products-delete">
     <input type="text" id="deleteId">
+     <input type="text" id="ownerId" value="{{idUser}}" style="display: none;">
     <input type="submit">
 </form>
 
