@@ -37,7 +37,7 @@ export const authRolesMiddleware = (userRole) => (req, res, next) => {
 
 export const generateToken = () => {
     const secret = config.jwt_secret;
-    return JWT.sign({},secret , {expiresIn: '1h'})
+    return JWT.sign({},secret , {expiresIn: '1s'})
 };
 
 export const verifyToken = (token) => {

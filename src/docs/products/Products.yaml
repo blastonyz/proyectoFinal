@@ -1,0 +1,49 @@
+paths:
+  /api/productsdb:
+    get:
+      schema:
+        type: string
+    responses:
+      200:
+        description: Lista de productos obtenida correctamente
+        content:
+        aplication/json:
+        schema:
+        types: object
+        properties:
+        status:
+        type: string
+        example: succes
+        payload:
+        $ref: '#/components/schemas/Products'
+      500: 
+        description: Error interno del servidor 
+  /set/realtimeproducts:
+    get:
+      schema:
+        type: string
+    responses:
+      200:
+        description: Lista de productos obtenida
+        content:
+        aplication/json:
+        schema:
+        properties:
+        status:
+        type: string
+        example: succes
+        payload:
+        $ref: '#/components/schemas/Products'
+      500: 
+        description: Error interno del servidor socket
+        summary: Crear
+        tags: 
+        - Products
+        schema:
+        properties:
+        status:
+        type: string
+        example: succes
+        payload:
+        $ref: '#/components/schemas/Products'      
+        

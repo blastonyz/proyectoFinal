@@ -3,6 +3,8 @@ import handlebars from 'express-handlebars';
 import sessions from 'express-session';
 import MongoStore from 'connect-mongo';
 import passport from 'passport';
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 import { __dirname } from './utils.js';
 import { generateProduct } from './utils/utils.mocking.js';
@@ -32,6 +34,21 @@ app.use(addLogger);
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname,'../public')));
+
+if(config.mode === 'production'){
+    const swaggerOpts = {
+        definition: {
+            openapi: '3.0.0',
+            info: {
+                title: 'Iron Tools ferreteria',
+                description: 'aplicacion e-commerce rubro ferreteria'
+            },
+        },
+        apis: [path.join(__dirname,'docs','**','*.yaml')]
+    };
+    const specs = swaggerJsDoc(swaggerOpts);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));    
+}
 
 app.use(sessions({
     store: MongoStore.create({

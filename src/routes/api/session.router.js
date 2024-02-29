@@ -14,6 +14,7 @@ router.post('/sessions/login',passport.authenticate('login', {failureRedirect: '
         req.logger.warning('Usuario sin autenticar');
         return res.redirect('/login')
     }
+ 
     res.status(302).redirect('/api/productsdb');
 });
 

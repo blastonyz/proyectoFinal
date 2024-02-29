@@ -83,7 +83,7 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
     done(null,newUser);
 }))
 
-passport.use('login', new LocalStrategy({usernameField: 'email'},async (email, password, done) => {
+passport.use('login', new LocalStrategy({usernameField: 'email'},async (email, password, done) => { 
         const user = await UsersController.findByEmail({email});
         if(!user){
             try {
@@ -105,7 +105,7 @@ passport.use('login', new LocalStrategy({usernameField: 'email'},async (email, p
         }
         const isNotValidPassword = !isValidPassword(password,user);
         if(isNotValidPassword){
-            return done(new Error(' aca Correo o Contraseña invalidos'));
+            return done(null, false, { message: 'Correo o Contraseña inválidos' });
         }
         logger.info('user', user);
         done(null, user);
