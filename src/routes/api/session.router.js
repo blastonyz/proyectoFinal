@@ -19,7 +19,7 @@ router.post('/sessions/login',passport.authenticate('login', {failureRedirect: '
 });
 
 router.post('/sessions/register',passport.authenticate('register', {failureRedirect: '/register'}), async (req,res) => { 
-    res.redirect('/login',);
+    res.status(200).redirect('/login');
 });
 
 router.get('/sessions/github',passport.authenticate('github' , {scope: ['user:email']}));
@@ -103,7 +103,7 @@ router.get('/sessions/logout', (req,res) => {
         if(error){
             return res.render('error', {messageError: error.message})
         }
-        res.redirect('/login');
+        res.status(200).redirect('/login');
     })
 });
 
