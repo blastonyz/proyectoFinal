@@ -7,6 +7,12 @@ const UserSchema = new mongoose.Schema({
     age: {type: Number},
     password: {type: String},
     role: {type: String, default: 'user'},
+    documents: [{
+        name: {type: String},
+        links: {type: String},
+        _id: false
+    }],
+    last_connection: {type: Date},
     cart:{type: mongoose.Schema.Types.ObjectId, ref: 'Carts'}
 },
 {timestamps: true}

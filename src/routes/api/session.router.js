@@ -11,10 +11,13 @@ const router = Router();
 
 router.post('/sessions/login',passport.authenticate('login', {failureRedirect: '/login'}), async (req,res) => {
     if(!req.user){
-        req.logger.warning('Usuario sin autenticar');
+        logger.warning('Usuario sin autenticar');
         return res.redirect('/login')
     }
- 
+     await UsersController.findAndUpdate(
+        { _id: req.user._id }, 
+        { last_connection: new Date() },   
+    );
     res.status(302).redirect('/api/productsdb');
 });
 

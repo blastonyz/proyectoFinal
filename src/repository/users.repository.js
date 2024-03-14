@@ -16,4 +16,7 @@ export default class UsersRepository {
     async updateUser(email,user){
         return this.dao.updateUser(email,user);
     }
+    async findAndUpdate(sid,data){
+        return this.dao.findAndUpdate(sid,data);
+    }
 }

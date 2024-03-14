@@ -19,4 +19,7 @@ export default class UsersController {
     static updateUser(email,user){
         return usersRepository.updateUser(email,user);
     }
+    static findAndUpdate(sid,data){
+        return usersRepository.findAndUpdate( sid,data);
+    }
 }

@@ -16,4 +16,7 @@ export default class UsersDao {
     static updateUser(email,user){
         return UsersModel.updateOne(email,user);
     }
+    static findAndUpdate(sid,data){
+        return UsersModel.findByIdAndUpdate(sid,data);
+    }
 }

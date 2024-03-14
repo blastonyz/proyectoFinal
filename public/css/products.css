@@ -161,3 +161,17 @@ border: 5px solid black;
 h3{
     color:aliceblue;
 }
+
+.multerForm{
+    display: block;
+    height: auto;
+    align-items: center;
+    margin: auto;
+    margin-top: 10vh;
+    background-color: rgba(240, 248, 255);
+}
+
+.uploadInputs{
+    display: block;
+    margin: auto;
+}
