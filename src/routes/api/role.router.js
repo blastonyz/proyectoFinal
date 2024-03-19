@@ -7,27 +7,30 @@ const router = express.Router();
 
 router.put('/users/premium/:uid', async (req,res)=>{
     const {uid} = req.params;
-    console.log(uid)
+    
     const oldUser =  await UsersController.findById(uid);
     if (!oldUser) {
         return res.status(404).json({ error: 'Usuario no encontrado' });
     }
-    console.log('olduser',oldUser)
-    const email = oldUser.email;
-    console.log('email', email);
+  
+    const totalNames = oldUser.documents.map((e) => e.name).filter(name => name !== undefined);
+    console.log('documents',totalNames);
+    const requiredDocuments = ['identificacion.txt', 'comprobante-domicilio.txt', 'comprobante-estado-de-cuenta.txt'];
     
-
-    const user = {
-                            
-                    last_name: oldUser.last_name,
-                    email: oldUser.email,
-                    age: oldUser.age,
-                    password: oldUser.password,
-                    role: 'user'? 'premium':'user',
-                    cart: oldUser.cart
-                }
+    let completeDocuments = true;
+    for (const docName of requiredDocuments) {
+        if (!totalNames.includes(docName)) {
+            completeDocuments = false;
+            break;
+        }
+    }
+    console.log('allRequiredDocumentsPresent', completeDocuments);
+    const user = {                        
+               role: completeDocuments ? 'premium' : oldUser.role
+               }
     
-   const changeRole =  UsersController.updateUser({email},user);
+   const changeRole = await  UsersController.findAndUpdate(uid,user);
+  
    res.status(200).json(changeRole)             
 });
 
@@ -41,8 +44,6 @@ router.post('/users/:uid/documents',uploader,async (req,res) =>{
     if (!uploadedFiles) {
         return res.status(400).send('No se han recibido archivos');
     }
-        
-        console.log("Uploaded Files:", uploadedFiles);
         const newDocuments = [];
         if (!uploadedFiles || Object.keys(uploadedFiles).length === 0) {
             return res.status(400).send('No se han recibido archivos');
@@ -94,20 +95,3 @@ router.get('/users/:uid/documents', (req,res) =>{
 
 export default router;
 
-
-/*  for (const fieldName in uploadedFiles) {
-            if (Object.prototype.hasOwnProperty.call(uploadedFiles, fieldName))  {
-                const files = uploadedFiles[fieldName];
-                console.log(`Fieldname: ${fieldName}, Files:`, files);
-
-                // Verificar si files es un array
-                if (Array.isArray(files)) {
-                    // Iterar sobre los archivos
-                    files.forEach(file => {
-                        newDocuments.push({name: file.originalname},{links: file.path})
-                    });
-                } else {
-                    console.error('No se ha recibido un array de archivos para el campo:', fieldName);
-                }
-            }
-        }*/
