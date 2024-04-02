@@ -22,7 +22,7 @@ export default class ProductController {
         return productsRepository.create(data);
     }
     static updateById(sid,data){
-       return productsRepository.updateById({_id: sid}, {$set: data });
+       return productsRepository.updateById( sid,  data );
     }
     static deleteById(sid){
         return productsRepository.deleteById({_id: sid});

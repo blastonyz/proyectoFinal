@@ -2,6 +2,10 @@ export default class UsersRepository {
     constructor(dao){
         this.dao = dao;
     }
+    async get(){
+        return this.dao.get();
+    }
+
     async findByEmail(email){
         return this.dao.findByEmail(email);
     }
@@ -18,5 +22,8 @@ export default class UsersRepository {
     }
     async findAndUpdate(sid,data){
         return this.dao.findAndUpdate(sid,data);
+    }
+    async findAndDelete({email}){
+        return this.dao.findAndDelete(email);
     }
 }

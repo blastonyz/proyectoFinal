@@ -1,36 +1,38 @@
 import {Router} from 'express';
-import ProductManager from '../../dao/ProductManagerMdb.js';
+import ProductController from '../../controller/products.controller.js';
+
 
 const router = Router();
 
-router.get('/productsdb', async (req,res) => {
-    const products = await ProductManager.get();
+router.get('/products/crud', async (req,res) => {
+    const products = await ProductController.get();
     res.status(200).json(products);
 });
 
-router.get('/productsdb/:sid', async (req,res) => {
+router.get('/products/crud/:sid', async (req,res) => {
     const {sid} = req.params;
-    const products = await ProductManager.getById(sid);
+    const products = await ProductController.getById(sid);
     res.status(200).json(products);
 });
 
-router.post('/productsdb', async (req,res) => {
+router.post('/products/crud', async (req,res) => {
     const {body} = req;
-    const products = await ProductManager.create(body);
+    const products = await ProductController.create(body);
     res.status(201).json(products);
 });
 
-router.put('/productsdb/:sid', async (req,res) => {
+router.put('/products/crud/:sid', async (req,res) => {
     const {sid} = req.params;
     const {body} = req;
-    await ProductManager.updateById(sid,body);
-    res.status(204).end();
+    const product = await ProductController.updateById(sid,body);
+    res.status(204).send(product);
 });
 
-router.put('/productsdb/:sid', async (req,res) => {
+router.delete('/products/crud/:sid', async (req,res) => {
     const {sid} = req.params;
-    await ProductManager.deleteById(sid);
-    res.status(204).end();
+
+    product = await ProductController.deleteById(sid);
+    res.status(204).send(product);
 });
 
 export default router;

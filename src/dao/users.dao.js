@@ -1,6 +1,9 @@
 import UsersModel from '../models/users.model.js';
 
 export default class UsersDao {
+    static get(){
+        return UsersModel.find();
+    }
 
     static findByEmail(email){
         return UsersModel.findOne(email);
@@ -18,5 +21,8 @@ export default class UsersDao {
     }
     static findAndUpdate(sid,data){
         return UsersModel.findByIdAndUpdate(sid,data);
+    }
+    static findAndDelete(email){
+        return UsersModel.findOneAndDelete({email});
     }
 }

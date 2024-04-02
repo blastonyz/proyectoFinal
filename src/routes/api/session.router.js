@@ -18,6 +18,7 @@ router.post('/sessions/login',passport.authenticate('login', {failureRedirect: '
         { _id: req.user._id }, 
         { last_connection: new Date() },   
     );
+    //res.status(200).send(req.user)
     res.status(302).redirect('/api/productsdb');
 });
 
@@ -92,14 +93,14 @@ router.post('/sessions/recovery-link', async (req,res) =>{
    );
    res.status(200).json(result);
 })
-
+/*
 router.get('/sessions/register',passport.authenticate('register', {failureRedirect: '/register'}), async (req,res) => { 
     res.redirect('/login');
 });
 
 router.get('/sessions/login',passport.authenticate('login', {failureRedirect: '/login'}), async (req,res) => { 
     res.render('error',{title: "error", messageError: Error});
-});
+});*/
 
 router.get('/sessions/logout', (req,res) => {
     req.session.destroy((error) =>{

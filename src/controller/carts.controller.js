@@ -6,7 +6,7 @@ const cartRepository = new CartRepository(CartDao);
 export default class CartController{
     
     static async createCart(productId, quantity,cartId){
-       //crea y añade a mongodb
+       //logica de gestion de cart
         console.log('cartID',cartId);
        
         try {

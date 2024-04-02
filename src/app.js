@@ -22,8 +22,8 @@ import indexRouter from './routes/views/index.router.js';
 import chatRouter from './routes/api/chat.router.js';
 import sessionRouter from './routes/api/session.router.js'
 import sessionRender from './routes/views/sessions.render.js'
-import usersRouter from './routes/api/role.router.js';
-
+import usersRouter from './routes/api/users.router.js';
+import productCRUD from './routes/api/products.mongo.js'
 
 const SESSION_SECRET = config.session_secret;
 
@@ -70,8 +70,6 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 
-
-//
 //persistencia de memoria local con websocket
 app.get('/home',async (req,res) => {
     const product = await productManager.getProducts();
@@ -90,16 +88,11 @@ app.get('/', (req,res) =>{
 //login
 app.use('/', sessionRender, sessionRouter);
 
-//paginacion
-app.use('/api',indexRouter, usersRouter);
+//paginacion de productos, gestion usuarios, cart, chat, crud productos con endpoint
+app.use('/api',indexRouter, usersRouter,cartRouter,chatRouter,productCRUD);
 
-//vista de carts
-app.use('/api',cartRouter);
 
-//chat
-app.use('/api',chatRouter);
-
-//realtime, websocket y mongoDB
+//crud productos con websocket y mongoDB
 app.use('/set',viewsRoutes);
 
 //mocking

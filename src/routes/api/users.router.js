@@ -1,9 +1,16 @@
 import express from 'express';
 import UsersController from '../../controller/users.controller.js';
 import uploader from '../../utils/uploader.js';
+import UsersDTO from '../../dto/users.dto.js';
+import EmailServices from '../../services/mail.services.js';
 
 
 const router = express.Router();
+router.get('/users', async (req,res)=>{
+    const allUsers = await UsersController.get();
+    const allUsersDTO = allUsers.map((user) => new UsersDTO(user))
+    res.status(200).json(allUsersDTO);
+})
 
 router.put('/users/premium/:uid', async (req,res)=>{
     const {uid} = req.params;
@@ -92,6 +99,41 @@ router.get('/users/:uid/documents', (req,res) =>{
     res.render('documents',{uid, title: 'Carga de documentos'})
 })
 
+router.delete('/users', async (req,res)=>{
+    const allUsers = await UsersController.get();
+    console.log('users', allUsers);
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    console.log('2dias', twoDaysAgo);
+    const promises = allUsers.map(async user => {
+        if (user.role !== 'admin') {
+          
+            if (user.last_connection && user.last_connection.getTime()   >= twoDaysAgo) {
+                console.log(`Usuario ${user.email} dentro del plazo.`);
+                console.log('ultima conexion', user.last_connection);
+                return null
+            } else {
+                console.log(`Usuario ${user.email} a eliminar.`);
+                console.log('ultima conexion', user.last_connection);
+                const emailService = EmailServices.getInstance();
+                await emailService.sendEmail(
+                `${user.email}`,
+                'Aviso de Iron Tools',
+                `<h2>${user.first_name} ${user.last_name} tu cuenta de Iron Tools fue eliminada por inactividad </h2>`
+             );
+                return await UsersController.findAndDelete(user.email);
+            }
+        } else {
+            console.log('Usuario administrador.');
+            return null
+        }
+    });
+ 
+    const results = await Promise.all(promises);
+    console.log('result',results);
+    res.status(200).json(results);
+});
+
+
 
 export default router;
-

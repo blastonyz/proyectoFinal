@@ -11,7 +11,6 @@ const router = Router();
 
 
 router.post('/carts', async (req,res) => {
-//crea y añade a mongodb
 const { productId, quantity } = req.body;
 const user = req.user;
 const cartId = user.cart;
@@ -40,7 +39,7 @@ router.delete('/carts/:cid/products/:pid', async (req,res) => {
 });
 
 router.delete('/carts/:cid', async (req,res) => {
-    //vaciamos carrito
+    //vaciamos carrito, borrarlo generaria conflictos con cartID
     const {cid} = req.params;
     
     try {
