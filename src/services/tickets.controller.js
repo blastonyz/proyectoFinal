@@ -3,7 +3,7 @@ import TicketsDao from "../dao/tickets.dao.js";
 import CartController from "../controller/carts.controller.js";
 import ProductController from "../controller/products.controller.js";
 import { v4 as uuidv4 } from 'uuid';
-
+ 
 
 const ticketsRepository = new TicketsRepository(TicketsDao);
 
@@ -35,23 +35,30 @@ export default class TicketsController {
                 }
             }));
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error:', error); 
+            throw error;
             
         }
     }
     static async succesStock(cartId) {
-        const compareResults = await TicketsController.compare(cartId);
+        try{
+            const compareResults = await TicketsController.compare(cartId);
 
-        const productsForRender = await Promise.all(compareResults.filter(elem => elem && elem.data));
-        console.log('data', productsForRender);
-
-        const notStock = compareResults
-            .filter(result => result && !result.subTotal)
-            .map(result => ({ prodId: result.prodId, quantity: result.quantity }));
-        console.log('notstock', { notStock });
-
-        const dataRender = { yes: { productsForRender }, no: { notStock } };
-        return dataRender;
+            const productsForRender = await Promise.all(compareResults.filter(elem => elem && elem.data));
+            console.log('data', productsForRender);
+    
+            const notStock = compareResults
+                .filter(result => result && !result.subTotal)
+                .map(result => ({ prodId: result.prodId, quantity: result.quantity }));
+            console.log('notstock', { notStock });
+    
+            const dataRender = { yes: { productsForRender }, no: { notStock } };
+            return dataRender;
+        }catch(error){
+            console.error('Error:', error);
+            throw new Error('Carrito no encontrado');
+        }
+       
     }
 
     static async Purchase(cartId, email) {

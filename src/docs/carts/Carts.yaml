@@ -10,6 +10,7 @@ paths:
           description: ID del carrito asociado al usuario
           schema:
             type: string
+            pattern: "^[0-9a-fA-F]{24}$"  # Expresión regular para IDs de MongoDB
       responses:
         200:
           description: Lista de productos del carrito obtenida correctamente

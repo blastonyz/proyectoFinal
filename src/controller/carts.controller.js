@@ -1,5 +1,6 @@
 import CartDao from '../dao/carts.dao.js';
 import CartRepository from '../repository/carts.repository.js';
+import { isValidObjectId } from 'mongoose';
 
 const cartRepository = new CartRepository(CartDao);
 
@@ -41,7 +42,7 @@ export default class CartController{
             }
             } catch (error) {
             console.error(error);
-           throw new Error;
+            throw new Error('Carrito no encontrado');
         
             }
     }
@@ -62,7 +63,9 @@ export default class CartController{
                );
                return productDelete;
             }catch (error) {
-               throw new Error;
+                console.error(error);
+                throw new Error('Carrito no encontrado');
+        
             }
     }
 
@@ -94,7 +97,9 @@ export default class CartController{
         let existingCart = await cartRepository.getById(_id);
         console.log('carrito',existingCart);
         if (!existingCart) {
-            throw new Error('Carrito no encontrado' );
+            console.error(error);
+            throw new Error('Carrito no encontrado');
+        
         }
         let existProductInd = existingCart.products.findIndex( (p) => p.prodId+"" === pId );
         console.log('indice',existProductInd);
@@ -111,14 +116,20 @@ export default class CartController{
     }
     static async getPopulate(_id){
         try {
+            if (!isValidObjectId(_id)) {
+                throw new Error('El _id proporcionado no es válido');
+            }
             let existingCart = await cartRepository.getPopulate(_id);
             console.log('carrito',existingCart);
             if (!existingCart) {
-                throw new Error('Carrito no encontrado' );
+                throw new Error('El _id proporcionado no es válido');
+            
             }
             return existingCart;
         }catch(error){
-        throw new Error('carrito no ecnotrado')
-         }
+            console.error('error: ',error);
+           throw error;
+        
+        }
     }
 }

@@ -5,13 +5,17 @@ import path from "path";
 const storage = multer.diskStorage({
     
     destination: function(req,file,cb){
+        console.log('filename',file.originalname)
         let folder;
-        if(file.originalname.includes('profile')){
-            folder = '/profile'
-        }else if(file.originalname.includes('documents')){
-            folder = '/documents'
-        }else{
-            folder = '/products'
+        switch (true) {
+            case file.originalname.includes('profile'):
+                folder = '/profile';
+                break;
+            case file.originalname.includes('products'):
+                folder = '/products';
+                break;
+            default:
+                folder = '/documents';
         }
         cb(null,path.join(__dirname, `../public/images/${folder}`))
     },
@@ -20,6 +24,6 @@ const storage = multer.diskStorage({
         } 
     });
 
-const uploader = multer({storage}).fields([{name:'profile', maxCount: 3}, {name:'documents', maxCount: 5}])
+const uploader = multer({storage}).fields([{name:'profile', maxCount: 3}, {name:'documents', maxCount: 5},{ name: 'products', maxCount: 1 } ])
 
 export default uploader;

@@ -1,4 +1,3 @@
-import express from 'express';
 import { Router } from 'express';
 import CartController from '../../controller/carts.controller.js';
 import TicketsController from '../../services/tickets.controller.js';
@@ -6,9 +5,8 @@ import UsersDTO from '../../dto/users.dto.js';
 import {authRolesMiddleware } from '../../utils.js';
 import CartDTO from '../../dto/cart.dto.js';
 import { logger } from '../../utils/logger.js';
+
 const router = Router();
-
-
 
 router.post('/carts', async (req,res) => {
 const { productId, quantity } = req.body;
@@ -94,6 +92,7 @@ router.put('/carts/:cid/products/:pid', async (req,res) => {
 
 
 router.get('/carts/:cid', authRolesMiddleware(['user']), async (req, res) => {
+    try{
     const _id = req.params.cid;
     const succesResult = await TicketsController.succesStock(_id);
 
@@ -108,6 +107,10 @@ router.get('/carts/:cid', authRolesMiddleware(['user']), async (req, res) => {
         notStock: notStockData,
         dataUserDTO
     });
+    }catch(error){
+        console.error('Error:', error);
+        throw error;
+    }
 });
 
 router.get('/:cid/purchase', async (req, res) => {
