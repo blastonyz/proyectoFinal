@@ -22,8 +22,6 @@ try {
 }
 });
 
-
-
 router.delete('/carts/:cid/products/:pid', async (req,res) => {
     //eliminar el producto seleccionado del carrito
     const _id = req.params.cid;
@@ -48,15 +46,12 @@ router.delete('/carts/:cid', async (req,res) => {
         logger.error('error al borrar carrito');
         res.status(400).json('error')
     }
-   
 });
-
 
 router.put('/carts/:cid', async (req,res) => {
     //actualiza products con un array
     const _id = req.params.cid;
     const { products: newProducts } = req.body;
-    
     
     try {
         let newCart = await CartController.updateCart(_id,newProducts);
@@ -65,9 +60,7 @@ router.put('/carts/:cid', async (req,res) => {
     } catch (error) {
         logger.error('error actualizando carrito');
         res.status(400).json("error al actualizar carrito");
-        
     }
-    
 });
 
 router.put('/carts/:cid/products/:pid', async (req,res) => {
@@ -88,8 +81,6 @@ router.put('/carts/:cid/products/:pid', async (req,res) => {
     }
    
 });
-
-
 
 router.get('/carts/:cid', authRolesMiddleware(['user']), async (req, res) => {
     try{

@@ -23,7 +23,9 @@ router.post('/sessions/login',passport.authenticate('login', {failureRedirect: '
 });
 
 router.post('/sessions/register',passport.authenticate('register', {failureRedirect: '/register'}), async (req,res) => { 
-    res.status(200).redirect('/login');
+  
+   res.status(200).send({url:'/login',message:'usuario registrado exitosamente'});
+  
 });
 
 router.get('/sessions/github',passport.authenticate('github' , {scope: ['user:email']}));
@@ -75,7 +77,7 @@ router.post('/sessions/recovery-link', async (req,res) =>{
     const {body: {email}} = req;
    
     console.log('email del usuario', email);
-    const validEmail = await UsersController.findByEmail()
+    const validEmail = await UsersController.findByEmail({email});
     if(!email){
         return res.render('error', {messageError: 'Email requerido'});
     }
@@ -92,15 +94,7 @@ router.post('/sessions/recovery-link', async (req,res) =>{
       `<h2>Ingresa al siguiente enlace para restablecer tu contraseña:</h2> <a href=${recoveryLink}>Link</a>`
    );
    res.status(200).json(result);
-})
-/*
-router.get('/sessions/register',passport.authenticate('register', {failureRedirect: '/register'}), async (req,res) => { 
-    res.redirect('/login');
 });
-
-router.get('/sessions/login',passport.authenticate('login', {failureRedirect: '/login'}), async (req,res) => { 
-    res.render('error',{title: "error", messageError: Error});
-});*/
 
 router.get('/sessions/logout', (req,res) => {
     req.session.destroy((error) =>{

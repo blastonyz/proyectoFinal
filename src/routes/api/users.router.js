@@ -3,6 +3,7 @@ import UsersController from '../../controller/users.controller.js';
 import uploader from '../../utils/uploader.js';
 import UsersDTO from '../../dto/users.dto.js';
 import UserService from '../../services/users.service.js';
+import { authRolesMiddleware } from '../../utils.js';
 
 const router = Router();
 router.get('/users', async (req,res)=>{
@@ -10,12 +11,16 @@ router.get('/users', async (req,res)=>{
     const allUsersDTO = allUsers.map((user) => new UsersDTO(user))
     res.status(200).json(allUsersDTO);
 })
-
+//cambia de roles si la documentacion esta completa
 router.put('/users/premium/:uid', async (req,res)=>{
     const {uid} = req.params;
     const changingRole = await UserService.roleVerify(uid)
     res.status(200).json(changingRole)             
 });
+
+/*router.get('/users/admin',authRolesMiddleware['admin'], (req,res)=>{
+
+})*/
 
 router.post('/users/:uid/documents',uploader,async (req,res) =>{
     try{

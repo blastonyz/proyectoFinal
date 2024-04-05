@@ -3,6 +3,7 @@ import TicketsDao from "../dao/tickets.dao.js";
 import CartController from "../controller/carts.controller.js";
 import ProductController from "../controller/products.controller.js";
 import { v4 as uuidv4 } from 'uuid';
+import EmailServices from "./mail.services.js";
  
 
 const ticketsRepository = new TicketsRepository(TicketsDao);
@@ -90,7 +91,7 @@ export default class TicketsController {
                 };
             }));
 
-           // console.log('stockRes',{stockResults});
+         
             const total = stockResults.reduce((acc, val) => acc + val.price, 0);
             console.log('total',total);
             const purchaseData = {
@@ -100,7 +101,15 @@ export default class TicketsController {
             };
 
             await CartController.updateCart({ _id: cartId }, result.no.notStock);
-
+            const emailService = EmailServices.getInstance();
+            await emailService.sendEmail(
+                `${email}`,
+                'Aviso de Compra en Iron Tools',
+                `<h2>¡Muchas Gracias por tu Compra!
+                   <p>Codigo de Compra: ${purchaseData.code}</p>
+                   <p>Total: $ ${total}</p>     
+                </h2>`
+            );
             return await ticketsRepository.create(purchaseData);
         } catch (error) {
             console.error('Error:', error);

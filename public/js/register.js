@@ -1,5 +1,5 @@
 const regForm = document.getElementById('registerForm');
-regForm.addEventListener('submit', (event) =>{
+regForm.addEventListener('submit', async (event) =>{
     event.preventDefault();
     const first_name = document.getElementById('first_nameInp').value;    
     const last_name = document.getElementById('last_nameInp').value;
@@ -15,7 +15,7 @@ regForm.addEventListener('submit', (event) =>{
         password
     };
 
-    fetch('/sessions/register',{
+    fetch('/sessions/register', {
         method: 'POST',
         body: JSON.stringify(user),
         headers: {
@@ -23,10 +23,14 @@ regForm.addEventListener('submit', (event) =>{
         },
     })
     .then((response) => {
-        console.log(response);
-        window.location.href = response.url;
+        return response.json();
+    })
+    .then((data) => {
+        console.log(data); 
+        window.location.href = data.url; 
     })
     .catch((err) => {
         console.log(err);
     });
 })
+
