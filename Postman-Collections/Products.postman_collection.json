@@ -1,0 +1,30 @@
+{
+	"info": {
+		"_postman_id": "afb4bb12-f881-4da1-b327-73e037c4687c",
+		"name": "Products",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30469069"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/productsdb",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"productsdb"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

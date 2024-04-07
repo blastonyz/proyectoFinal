@@ -1,41 +1,19 @@
-<h1>Lista de Productos del carrito</h1>
+<h2 class="cartTitle">Lista de Productos del carrito</h2>
 <div class="listContainerCart">
-    {{#each cartDb}}
-      <div class="productContainerCart">
+     <div id="cart" data-cid="{{ cid }}" style="display: none;"></div>
+    <article class="productDetailsCart"> 
+            
+     </article>
+    
+      <h3 class="subTitleCart">Productos sin Stock Suficiente</h3>
+     
+      <div id="notStockContainer"class="notStockContainer">
         
-         <article class="productDetailsCart">
-
-            <header class="productTitle">
-                <p>{{this.title}}</p>
-            </header>    
-              <p>Descripcion: {{this.description}}</p>
-              <p>Precio: ${{this.price}}</p>
-              <p>Categoria:  {{this.category}}</p>
-              <p>Stock:  {{this.stock}} unidades</p>
-              <p>Cantidad: {{this.quantity}}</p>
-              <p>SubTotal: {{this.subTotal}}</p>
-         </article>
-      </div>
-    {{/each}}
-    <a href="/api/{{dataUserDTO.cart}}/purchase" >Comprar</a>
-   
-      <h3 class="subTitle">Productos sin Stock Suficiente</h3>
-     {{#each notStock}}
-      <div class="productContainerCart">
-        
-         <article class="productDetailsCart">
-        
-            <header class="productTitle">
-                <p>{{this.prodId.title}}</p>
-            </header>    
-              <p>Descripcion: {{this.prodId.description}}</p>
-              <p>Precio: ${{this.prodId.price}}</p>
-              <p>Categoria:  {{this.prodId.category}}</p>
-              <p>Stock:  {{this.prodId.stock}} unidades</p>
-              <p>Cantidad: {{this.quantity}}</p>
+         <article class="listContainerCart">      
               
          </article>
       </div>
-    {{/each}}
+    
 </div>
 
+<script src="/js/cart.js"></script>

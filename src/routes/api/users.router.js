@@ -18,9 +18,6 @@ router.put('/users/premium/:uid', async (req,res)=>{
     res.status(200).json(changingRole)             
 });
 
-/*router.get('/users/admin',authRolesMiddleware['admin'], (req,res)=>{
-
-})*/
 
 router.post('/users/:uid/documents',uploader,async (req,res) =>{
     try{
@@ -47,6 +44,34 @@ router.delete('/users', async (req,res)=>{
     res.status(200).json(deleteResults);
 });
 
+router.get('/users/admin/:uid', async(req,res)=>{
+    const {uid} = req.params;
+    const user = await UsersController.findById(uid);
+    res.json(user)
 
+});
+router.put('/users/admin/:uid', async(req,res)=>{
+    const {uid} = req.params;
+  
+    const user = await UsersController.findById(uid);
+   const role =  user.role === 'user' ? 'premium' : user.role;
+   console.log('rol',role)
+    const data = {                        
+            role:role
+        }
+    const userUpdate = await UsersController.findAndUpdate(uid,data);
+    console.log('user',userUpdate);
+    res.json(userUpdate)
 
+});
+
+router.delete('/users/admin/:uid', async(req,res)=>{
+    const {uid} = req.params;
+    const user = await UsersController.findById(uid)
+
+    const deleteUser = await UsersController.findAndDelete(user.email);
+    console.log('user',deleteUser);
+    res.json(deleteUser)
+
+});
 export default router;

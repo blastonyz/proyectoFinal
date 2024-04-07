@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import CartController from '../../controller/carts.controller.js';
-import TicketsController from '../../services/tickets.controller.js';
+import TicketsServices from '../../services/tickets.services.js';
 import UsersDTO from '../../dto/users.dto.js';
 import {authRolesMiddleware } from '../../utils.js';
 import CartDTO from '../../dto/cart.dto.js';
@@ -85,14 +85,20 @@ router.put('/carts/:cid/products/:pid', async (req,res) => {
 router.get('/carts/:cid', authRolesMiddleware(['user']), async (req, res) => {
     try{
     const _id = req.params.cid;
-    const succesResult = await TicketsController.succesStock(_id);
+    const succesResult = await TicketsServices.succesStock(_id);
 
     const cartDTO = new CartDTO(succesResult);
 
     const dataUserDTO = new UsersDTO(req.user);
     const notStockData = await cartDTO.notStock; 
    logger.info('not stock obj', notStockData);
-    res.render('cart', {
+    /*res.render('cart', {
+        title: 'cart',
+        cartDb: cartDTO.productsForRender,
+        notStock: notStockData,
+        dataUserDTO
+    });*/
+    res.json( {
         title: 'cart',
         cartDb: cartDTO.productsForRender,
         notStock: notStockData,
@@ -110,9 +116,9 @@ router.get('/:cid/purchase', async (req, res) => {
 
     try {
          
-        const succesResult = await TicketsController.succesStock(cartId);
+        const succesResult = await TicketsServices.succesStock(cartId);
     
-        const purchase = await TicketsController.Purchase(cartId, email);
+        const purchase = await TicketsServices.Purchase(cartId, email);
     
         const cartDTO = new CartDTO(succesResult);
     
@@ -124,11 +130,17 @@ router.get('/:cid/purchase', async (req, res) => {
                                    amount: purchase.amount,
                                    purchaser: purchase.purchaser 
         }
-        res.render('purchase', {
+        /*res.render('purchase', {
+            title: 'Compra', 
+            purchase:purchaseRenderData ,
+            notStock
+        });*/
+        res.json({
             title: 'Compra', 
             purchase:purchaseRenderData ,
             notStock
         });
+
     } catch (error) {
        logger.error('Error al procesar la compra:', error);
         res.status(500).json({ message: 'Error en la compra' });

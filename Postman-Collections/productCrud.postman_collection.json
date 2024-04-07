@@ -1,0 +1,136 @@
+{
+	"info": {
+		"_postman_id": "9b222f8d-d46a-4871-b3c5-69ca84a4ec1f",
+		"name": "productCrud",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30469069"
+	},
+	"item": [
+		{
+			"name": "GetProducts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/crud",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"crud"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Lijadora Hilti\",\r\n    \"description\": \"con sistema de aspirado\",\r\n    \"price\": 355000,\r\n    \"category\": \"equipos electricos\",\r\n    \"code\": 37,\r\n    \"stock\": 4,\r\n    \"statusP\": true,\r\n    \"owner\":\"uid\",\r\n    \"thumbnail\": []\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/products/crud",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"crud"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\": \"Lijadora Hilti\",\r\n    \"description\": \"con sistema de aspirado\",\r\n    \"price\": 355000,\r\n    \"category\": \"equipos electricos\",\r\n    \"code\": 37,\r\n    \"stock\": 4,\r\n    \"statusP\": true,\r\n    \"thumbnail\": [],\r\n    \"owner\": \"6612fad473f02582b31e4231\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/products/crud/(productID)",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"crud",
+						"(productID)"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/crud/(productid)",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"crud",
+						"(productid)"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetProductByID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/products/crud/(productID)",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"products",
+						"crud",
+						"(productID)"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

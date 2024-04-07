@@ -5,9 +5,10 @@ import UsersController from '../controller/users.controller.js';
 import CartDao from '../dao/carts.dao.js';
 import { createHash, isValidPassword } from '../utils.js';
 import { CustomErrors } from '../utils/custom.errors.js';
-import { generatorLoginError, generatorUserError, generatorRegisterError } from '../utils/causeMessage.errors.js';
+import { generatorUserError, generatorRegisterError } from '../utils/causeMessage.errors.js';
 import listErrors from '../utils/list.errors.js';
 import { logger } from '../utils/logger.js';
+
 
 export const init = () => {
 const registerOpts = {
@@ -87,17 +88,10 @@ passport.use('login', new LocalStrategy({usernameField: 'email'},async (email, p
         const user = await UsersController.findByEmail({email});
         if(!user){
             try {
-            req.logger.warning('Usuario no registrado');    
-            throw CustomErrors.create({
-                    name:'invalid users data',
-                    cause: generatorLoginError({ 
-                        email,
-                        password
-                    }),     
-                   
-                   message: 'Error al intentar ingresar',
-                   code: listErrors.BAD_REQUEST_ERROR,     
-                    })
+            logger.warning('Usuario no registrado');
+            return done(null, false, { message: 'Correo o Contraseña inválidos' });    
+           
+                     
             } catch (error) {
                 return done(error)
             }
@@ -114,7 +108,7 @@ passport.use('login', new LocalStrategy({usernameField: 'email'},async (email, p
 const githubOpts = {
     clientID: 'Iv1.6f5ab4fc06090141',
     clientSecret: '2f643dad7c1c3cf06e255a85805a55687657ad06',
-    callbackURL: 'http://localhost:8080/sessions/github/callback',
+    callbackURL: 'http://localhost:8080/api/sessions/github/callback',
     
 };
 

@@ -12,14 +12,15 @@ const router = Router();
 router.post('/sessions/login',passport.authenticate('login', {failureRedirect: '/login'}), async (req,res) => {
     if(!req.user){
         logger.warning('Usuario sin autenticar');
-        return res.redirect('/login')
+        
+        return res.status(401).json({url:'/login',message:'erro al iniciar sesion'})
     }
      await UsersController.findAndUpdate(
         { _id: req.user._id }, 
         { last_connection: new Date() },   
     );
-    //res.status(200).send(req.user)
-    res.status(302).redirect('/api/productsdb');
+    res.status(200).send({url:'/productsdb',message:'inicio de sesion exitoso'})
+ 
 });
 
 router.post('/sessions/register',passport.authenticate('register', {failureRedirect: '/register'}), async (req,res) => { 
@@ -31,8 +32,9 @@ router.post('/sessions/register',passport.authenticate('register', {failureRedir
 router.get('/sessions/github',passport.authenticate('github' , {scope: ['user:email']}));
 
 router.get('/sessions/github/callback', passport.authenticate('github', {failureredirect: '/login'}), (req,res) =>{
-    req.logger.info('suario github',req.user);
-    res.redirect('/api/productsdb');
+    req.logger.info('usuario github',req.user);
+    res.redirect('/productsdb');
+   
 });
 
 router.post('/sessions/recovery-password',async (req,res) =>{

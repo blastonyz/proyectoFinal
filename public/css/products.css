@@ -26,19 +26,20 @@
     background-attachment: scroll;
     height: 90vh;
     width: 100%;
-    
-
 }
 
 .welcome{
+    display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     text-align: center;
+    background: linear-gradient(to bottom, #464343, #8f8787);
+    height:140px;
 }
 
 
 .listContainer{
-        margin-top: 25px;
         width: 100%;    
         display: flex;
         padding: 10px;
@@ -149,6 +150,12 @@ align-items: flex-start;
 border: 5px solid black;
 }
 
+.link{
+    margin-top: 20px;
+    margin-left: 65%;
+    padding-top: 20px;
+}
+
 .subTitle{
     color: aliceblue;
 }
@@ -180,4 +187,7 @@ h3{
 .uploadInputs{
     display: block;
     margin: auto;
+}
+.userFind{
+    color: aliceblue;
 }

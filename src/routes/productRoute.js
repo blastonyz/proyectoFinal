@@ -14,7 +14,7 @@ router.get('/products',async (req,res) => {
     if(!limit){   
      res.json(product);}else{
      const filtrated = product.filter((prod) => prod.id <=limit);
-     console.log("filtrao")
+     console.log("filtrado")
      return res.status(201).json(filtrated);    
      }   
  });

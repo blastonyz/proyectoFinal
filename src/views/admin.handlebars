@@ -1,0 +1,15 @@
+<article class="loginContainer">
+    <h2>Gestion de Usuarios</h2>
+
+    <h3>Buscar por Id</h3>
+    <form action="/api/users/admin/:uid" method="get" id="findId">
+    <input type="text" id="idInp" placeholder="Id del usuario" class="inputs">
+     <input type="submit" class="inputs">
+    </form>
+    <div class="userFind">
+
+    </div>
+    <button role="button" id="updateRoleBtn" >Cambiar Rol</button>
+    <button role="button" id="deleteUserBtn" >Borrar Usuario</button>
+</article>
+<script src="/js/admin.js"></script>

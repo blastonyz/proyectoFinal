@@ -1,7 +1,6 @@
 import {Router} from 'express';
 import ProductController from '../../controller/products.controller.js';
-
-
+import ProductService from '../../services/products.service.js';
 const router = Router();
 
 router.get('/products/crud', async (req,res) => {
@@ -30,9 +29,8 @@ router.put('/products/crud/:sid', async (req,res) => {
 
 router.delete('/products/crud/:sid', async (req,res) => {
     const {sid} = req.params;
-
-    product = await ProductController.deleteById(sid);
-    res.status(204).send(product);
+   const productDelete = await ProductService.DeleteProduct(sid)
+    res.status(204).send(productDelete);
 });
 
 export default router;

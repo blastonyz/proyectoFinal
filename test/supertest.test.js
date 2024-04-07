@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import supertest from 'supertest';
-
+//el objeto agent simula el comportamiento del navegador al darle persistenciaa las sesiones
 const requester = supertest.agent('http://localhost:8080');
 
 describe('Router Test',function () {
@@ -13,10 +13,10 @@ describe('Router Test',function () {
             };
 
             const {statusCode, ok, _body} = await requester
-                .post('/sessions/login')
+                .post('/api/sessions/login')
                 .send(userAdmin);
                 
-            expect(statusCode).to.be.equal(302);
+            expect(statusCode).to.be.equal(200);
             console.log(statusCode, ok , _body);    
         });
 
@@ -40,7 +40,7 @@ describe('Router Test',function () {
 
         it('logout', async function(){
            
-            const {statusCode, ok, _body} = await requester.get('/sessions/logout')
+            const {statusCode, ok, _body} = await requester.get('/api/sessions/logout')
 
             expect(statusCode).to.be.equal(302);    
             console.log(statusCode, ok , _body);    
@@ -57,7 +57,7 @@ describe('Router Test',function () {
             };
 
             const {statusCode, ok, _body} = await requester
-                .post('/sessions/register')
+                .post('/api/sessions/register')
                 .send(userTest);
             
             expect(statusCode).to.be.equal(400);
@@ -74,7 +74,7 @@ describe('Router Test',function () {
             };
 
             const {statusCode, ok, _body} = await requester
-                .post('/sessions/register')
+                .post('/api/sessions/register')
                 .send(userTest);
             
             expect(statusCode).to.be.equal(400);
@@ -88,10 +88,10 @@ describe('Router Test',function () {
             };
 
             const {statusCode, ok, _body} = await requester
-                .post('/sessions/login')
+                .post('/api/sessions/login')
                 .send(userTest);
 
-            expect(statusCode).to.be.equal(302);    
+            expect(statusCode).to.be.equal(200);    
             console.log(statusCode, ok , _body);    
         });
 

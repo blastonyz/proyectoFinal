@@ -9,15 +9,15 @@ const router = Router();
 router.get('/productsdb', async(req,res) => {
    if(!req.user){
       req.logger.warning('Usuario sin autenticar');
-      return res.redirect('/login')
+      return res.json({url:'/login'})
   }
    const baseUrl = req.protocol + '://' + req.get('host');
    const {limit = 10, page = 1, sort, search} = req.query;   
    const dataUserDTO = new UsersDTO(req.user);
    logger.info('datos de usuario',dataUserDTO);
-   const data = await ProductService.ProductResponse(limit,page,sort,search,baseUrl);
-   res.render('productsdb' ,{...data,title: 'integracion de DB',dataUserDTO});
-
+   const productResponse = await ProductService.ProductResponse(limit,page,sort,search,baseUrl);
+   //res.render('productsdb' ,{...data,title: 'integracion de DB',dataUserDTO});
+   res.json({productResponse,title: 'integracion de DB',dataUserDTO});
 })
 
 export default router;

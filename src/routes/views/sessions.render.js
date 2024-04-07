@@ -5,8 +5,8 @@ import { verifyToken } from "../../utils.js";
 const router= Router();
 
 router.get('/login', (req,res) =>{
-     const error = req.query.error; 
-    res.render('login', {title:"Inicio de Sesion",error})
+   
+    res.render('login', {title:"Inicio de Sesion"})
 });
 
 router.get('/register', (req,res) =>{

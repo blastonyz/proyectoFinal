@@ -82,7 +82,7 @@ export default class UserService{
         const promises = allUsers.map(async user => {
             if (user.role !== 'admin') {
               
-                if (user.last_connection && user.last_connection.getTime()   >= twoDaysAgo) {
+                if (!user.last_connection || user.last_connection && user.last_connection.getTime()   >= twoDaysAgo) {
                     console.log(`Usuario ${user.email} dentro del plazo.`);
                     console.log('ultima conexion', user.last_connection);
                     return null

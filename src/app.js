@@ -13,17 +13,22 @@ import {init as initPassport} from './passport/passport.config.js';
 import config from './config/config.js';
 import { errorHandlerMiddleware } from './utils/error.handler.middleware.js';
 import { addLogger,logger } from './utils/logger.js';
+import { authRolesMiddleware } from './utils.js';
 
-import cartRouter from "./routes/views/cartRoutes.js"
+import cartRouter from "./routes/api/cartRoutes.js";
 import productRouter from "./routes/productRoute.js";
 import productManager from './dao/productManager.js';
 import viewsRoutes from './routes/viewsRoutes.js';
-import indexRouter from './routes/views/index.router.js';
+import indexRouter from './routes/api/index.router.js';
 import chatRouter from './routes/api/chat.router.js';
 import sessionRouter from './routes/api/session.router.js'
 import sessionRender from './routes/views/sessions.render.js'
 import usersRouter from './routes/api/users.router.js';
-import productCRUD from './routes/api/products.mongo.js'
+import productCRUD from './routes/api/products.mongo.js';
+import indexRender from './routes/views/index.render.js';
+import cartRender from './routes/views/cart.render.js';
+import  purchaseRender from './routes/views/purchase.render.js'
+import adminRender from './routes/views/admin.render.js'
 
 const SESSION_SECRET = config.session_secret;
 
@@ -85,11 +90,11 @@ app.get('/', (req,res) =>{
 });
 
 //persistencia MongoDB
-//login
-app.use('/', sessionRender, sessionRouter);
+//render de vistas
+app.use('/', sessionRender, indexRender,cartRender,purchaseRender,adminRender);
 
-//paginacion de productos, gestion usuarios, cart, chat, crud productos con endpoint
-app.use('/api',indexRouter, usersRouter,cartRouter,chatRouter,productCRUD);
+//Rutas de paginacion de productos, gestion usuarios, cart, chat, crud productos con endpoint
+app.use('/api',sessionRouter,indexRouter, usersRouter,cartRouter,chatRouter,authRolesMiddleware(['premiun','admin']),productCRUD);
 
 
 //crud productos con websocket y mongoDB
