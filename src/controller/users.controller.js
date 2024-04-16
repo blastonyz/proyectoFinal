@@ -1,4 +1,4 @@
-import UsersDao from '../dao/users.dao.js';
+import UsersDao from '../dao/mongo/users.dao.js';
 import UsersRepository from '../repository/users.repository.js';
 
 const usersRepository = new UsersRepository(UsersDao)

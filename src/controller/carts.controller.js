@@ -1,4 +1,4 @@
-import CartDao from '../dao/carts.dao.js';
+import CartDao from '../dao/mongo/carts.dao.js';
 import CartRepository from '../repository/carts.repository.js';
 import { isValidObjectId } from 'mongoose';
 

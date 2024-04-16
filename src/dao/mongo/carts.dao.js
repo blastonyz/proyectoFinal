@@ -1,5 +1,5 @@
-import CartModel from '../models/carts.models.js';
-import CartRepository from '../repository/carts.repository.js';
+import CartModel from '../../models/carts.models.js';
+import CartRepository from '../../repository/carts.repository.js';
 
 export default class CartDao extends CartRepository{
     static getById(cartId){

@@ -1,7 +1,6 @@
-import ProductManagerMdb from "../dao/ProductManagerMdb.js";
+import productDao from '../dao/products.factory.js'
 import ProductsRepository from "../repository/products.repository.js";
-
-const productsRepository = new ProductsRepository(ProductManagerMdb);
+const productsRepository = new ProductsRepository(productDao)
 
 export default class ProductController {
     static get(){

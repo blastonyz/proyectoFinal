@@ -1,4 +1,4 @@
-import UsersModel from '../models/users.model.js';
+import UsersModel from '../../models/users.model.js';
 
 export default class UsersDao {
     static get(){

@@ -14,7 +14,7 @@ export const init = (httpServer) => {
 
     socketServer.on('connection', async (socketClient) => {
         
-        let productList = await ProductController.get();
+        let productList = await ProductController.getPaginated();
 
         console.log(`Nuevo cliente conectado ${socketClient.id}`);
         //envio lista completa

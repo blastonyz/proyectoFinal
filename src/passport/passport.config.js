@@ -2,7 +2,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy} from 'passport-local';
 import { Strategy as GithubStrategy } from 'passport-github2';
 import UsersController from '../controller/users.controller.js';
-import CartDao from '../dao/carts.dao.js';
+import CartController from '../controller/carts.controller.js'; 
 import { createHash, isValidPassword } from '../utils.js';
 import { CustomErrors } from '../utils/custom.errors.js';
 import { generatorUserError, generatorRegisterError } from '../utils/causeMessage.errors.js';
@@ -68,7 +68,7 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
         
     }
 
-    const newCart = await CartDao.create({products:[]});
+    const newCart = await CartController.create({products:[]});
     const cartID = newCart._id.toString();
     logger.info('cartID',cartID);
     const newUser = await UsersController.createUser({

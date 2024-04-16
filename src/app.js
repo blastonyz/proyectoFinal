@@ -16,8 +16,6 @@ import { addLogger,logger } from './utils/logger.js';
 import { authRolesMiddleware } from './utils.js';
 
 import cartRouter from "./routes/api/cartRoutes.js";
-import productRouter from "./routes/productRoute.js";
-import productManager from './dao/productManager.js';
 import viewsRoutes from './routes/viewsRoutes.js';
 import indexRouter from './routes/api/index.router.js';
 import chatRouter from './routes/api/chat.router.js';
@@ -29,6 +27,7 @@ import indexRender from './routes/views/index.render.js';
 import cartRender from './routes/views/cart.render.js';
 import  purchaseRender from './routes/views/purchase.render.js'
 import adminRender from './routes/views/admin.render.js'
+
 
 const SESSION_SECRET = config.session_secret;
 
@@ -66,7 +65,7 @@ app.use(sessions({
 }))
 
 
-
+console.log('persistencia',config.persistence); 
 initPassport();
 app.use(passport.initialize());
 app.use(passport.session());
@@ -75,14 +74,6 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
 
-//persistencia de memoria local con websocket
-app.get('/home',async (req,res) => {
-    const product = await productManager.getProducts();
-    res.render('index' , { title: 'handlebars y socket.io',product});
-});
-//persistencia de memoria JSON local
-app.use('/old',productRouter);
-//
 
 //middleware de ruta
 app.get('/', (req,res) =>{
@@ -94,7 +85,7 @@ app.get('/', (req,res) =>{
 app.use('/', sessionRender, indexRender,cartRender,purchaseRender,adminRender);
 
 //Rutas de paginacion de productos, gestion usuarios, cart, chat, crud productos con endpoint
-app.use('/api',sessionRouter,indexRouter, usersRouter,cartRouter,chatRouter,authRolesMiddleware(['premiun','admin']),productCRUD);
+app.use('/api',sessionRouter,indexRouter, usersRouter,cartRouter,chatRouter,authRolesMiddleware(['premium','admin']),productCRUD);
 
 
 //crud productos con websocket y mongoDB

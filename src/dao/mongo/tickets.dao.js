@@ -1,5 +1,5 @@
-import TicketsModels from '../models/tickets.models.js';
-import TicketsRepository from '../repository/tickets.repository.js';
+import TicketsModels from '../../models/tickets.models.js';
+import TicketsRepository from '../../repository/tickets.repository.js';
 
 export default class TicketsDao extends TicketsRepository{
     static create(purchaseData){

@@ -1,29 +1,42 @@
 import fs from 'fs';
 import {v4 as uuidV4} from 'uuid';
+import ProductsDao from '../products.dao.js';
 
-class ProductManager{
+export default class ProductJsonDao extends ProductsDao{
    
 
     constructor(){
+        super();
         this.products = [];
         this.path = './productos.json'
     }
     
-   async getProducts(){
-        if(!fs.existsSync(this.path)){
-            return console.log('el archivo no se encuentra')
-        }else{
-            try {                           
-                    const listJSON = await fs.promises.readFile(this.path,'utf-8');
-                    const list = JSON.parse(listJSON);                    
-                    return list;
-            }catch (error) {
-                console.error(`Ocurrio un error: ${error.message}`)
-        }
-        }
-    }
+    async getPaginated() {
+      if (!fs.existsSync(this.path)) {
+          console.log('El archivo no se encuentra');
+          return []; 
+      } else {
+          try {
+              const listJSON = await fs.promises.readFile(this.path, 'utf-8');
+              const list = JSON.parse(listJSON);
+              return {
+                  docs: list, 
+                  totalPages: 1,
+                  prevPage: null,
+                  nextPage: null,
+                  page: 1,
+                  hasPrevPage: false,
+                  hasNextPage: false,
+                  limit: list.length // Podrías establecer el límite en la longitud de la lista
+              };
+          } catch (error) {
+              console.error(`Ocurrió un error: ${error.message}`);
+              return []; // Retorna un array vacío si ocurre un error
+          }
+      }
+  }
 
- async addProduct(title,description,price,category,code,stock,statusP,thumbnail){
+ async create({title,description,price,category,code,stock,statusP,thumbnail}){
         if (!title||!description||!price||!category||!code||!stock||!statusP) {
           return  console.warn("Todos los campos son requeridos");
             
@@ -60,7 +73,7 @@ class ProductManager{
 
     }
 
-    async updateProduct(prodid,newTitle,newDescription,newPrice,newCategory,newCode,newStock,newStatusP){
+    async findAndUpdate(sid,{newTitle,newDescription,newPrice,newCategory,newCode,newStock,newStatusP}){
         
       if(!fs.existsSync(this.path)){
           return console.log('el archivo no se encuentra')
@@ -68,7 +81,7 @@ class ProductManager{
           try {                           
                   const listJSON = await fs.promises.readFile(this.path,'utf-8');
                   const list = JSON.parse(listJSON);
-                  const index = list.findIndex((e)=> e.id === prodid);
+                  const index = list.findIndex((e)=> e.id === sid);
                   console.log(index)
                      if(index !== -1){
                       const updatedObj = {...this.products[index],
@@ -97,7 +110,7 @@ class ProductManager{
           }
       }
 
-    async getProductsbyId(prodid){
+    async getById(sid){
 
         if(!fs.existsSync(this.path)){
             return console.log('el archivo no se encuentra')
@@ -105,7 +118,7 @@ class ProductManager{
             try {                           
                     const listJSON = await fs.promises.readFile(this.path,'utf-8');
                     const list = JSON.parse(listJSON);
-                    const getId = list.find((p)=> p.id == prodid)
+                    const getId = list.find((p)=> p.id == sid)
                     if(!getId){
                         console.warn("Product not Found")
                         return
@@ -121,7 +134,7 @@ class ProductManager{
 
    
 
-    async deleteProduct(prodid){
+    async deleteById(sid){
             
         if(!fs.existsSync(this.path)){
             return console.log('el archivo no se encuentra')
@@ -129,7 +142,7 @@ class ProductManager{
             try {                          
                     const listJSON = await fs.promises.readFile(this.path,'utf-8');
                     const list = JSON.parse(listJSON);
-                    const deletedList = list.filter((e)=> e.id !== prodid)
+                    const deletedList = list.filter((e)=> e.id !== sid)
                     this.products= deletedList;
                     const content = JSON.stringify(this.products,null,'\t')
                     try {
@@ -152,9 +165,10 @@ class ProductManager{
 
 
 
- const productManager = new ProductManager
+
 //instacia de productos
- productManager.addProduct(
+/*
+ productManager.create(
     "Taladro Makita",
     "Rotopercutor",
     60000,
@@ -166,7 +180,7 @@ class ProductManager{
 
  )
  
- productManager.addProduct(
+ productManager.create(
     "Lijadora Orbital",
     "5 velocidades",
     35000,
@@ -176,7 +190,7 @@ class ProductManager{
     true,
     [],
  )
- productManager.addProduct(
+ productManager.create(
     "Compresor Daewo",
     "1/2hp",
     55000,
@@ -187,7 +201,7 @@ class ProductManager{
     [],
  )
  
- productManager.addProduct(
+ productManager.create(
    "Amoladora Stanley" ,
     "2 1/2",
     52000,
@@ -198,7 +212,7 @@ class ProductManager{
     [],
  )
 
- productManager.addProduct(
+ productManager.create(
     "Caladora Marolio" ,
     "le da sabor a tu vida",
     2500,
@@ -209,7 +223,7 @@ class ProductManager{
     [],
   )
 
-  productManager.addProduct(
+  productManager.create(
     "Inflador ACME" ,
     "sin garantia",
     1800,
@@ -220,7 +234,7 @@ class ProductManager{
     [],
   ) 
 
-  productManager.addProduct(
+  productManager.create(
     "Taladro p/Drywalt Bosch" ,
     "700w",
     25000,
@@ -231,7 +245,7 @@ class ProductManager{
     [],
   )
 
-  productManager.addProduct(
+  productManager.create(
     "Termofusora Noderrit" ,
     "1500w",
     35000,
@@ -242,7 +256,7 @@ class ProductManager{
     [],
   )
 
-  productManager.addProduct(
+  productManager.create(
     "Motosierra Truchan" ,
     "Z50",
     21000,
@@ -253,7 +267,7 @@ class ProductManager{
     [],
   )
 
-  productManager.addProduct(
+  productManager.create(
     "Soldadora Luqstoff" ,
     "2500w",
     95000,
@@ -262,7 +276,7 @@ class ProductManager{
     68,
     true,
     [],
-  )
+  )*/
   
-export default productManager;
+
  

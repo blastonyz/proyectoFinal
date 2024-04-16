@@ -1,5 +1,5 @@
 import TicketsRepository from "../repository/tickets.repository.js";
-import TicketsDao from "../dao/tickets.dao.js";
+import TicketsDao from "../dao/mongo/tickets.dao.js";
 import CartController from "../controller/carts.controller.js";
 import ProductController from "../controller/products.controller.js";
 import { v4 as uuidv4 } from 'uuid';

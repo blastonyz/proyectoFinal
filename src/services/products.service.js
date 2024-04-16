@@ -15,11 +15,12 @@ export default class ProductService{
            criterials.category = search;
         }
         const products = await ProductController.getPaginated(criterials,options);
-     
+        console.log('getPaginated',products);
         const buildResponse = (prods) => {
            return{
               status: 'succes',
-              payload: prods.docs.map((doc)=> doc.toJSON()),
+              //payload: prods.docs.map((doc)=> doc.toJSON()),
+              payload: prods.docs,
               totalPages: prods.totalPages,
               prevPage: prods.prevPage,
               nextPage: prods.nextPage,
