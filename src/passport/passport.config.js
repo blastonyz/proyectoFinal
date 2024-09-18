@@ -68,7 +68,7 @@ passport.use('register', new LocalStrategy(registerOpts,async (req, email, passw
         
     }
 
-    const newCart = await CartController.create({products:[]});
+    const newCart = await CartController.createCart({products:[]});
     const cartID = newCart._id.toString();
     logger.info('cartID',cartID);
     const newUser = await UsersController.createUser({
